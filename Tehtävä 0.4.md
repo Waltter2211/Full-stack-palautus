@@ -8,7 +8,7 @@ sequenceDiagram
     Note right of browser: User saves new note to the website using POST method
     server-->>browser: 302 redirect
     deactivate server
-    Note left of server: Server receives POST method and sends redirect request back to browser
+    Note left of server: Server receives POST method and answers with status code 302
     browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/notes
     activate server
     server-->>browser: HTML document
