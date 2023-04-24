@@ -10,5 +10,5 @@ sequenceDiagram
     deactivate server
     Note left of server: Server receives POST method and answers with status code 302
     browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/notes
-    Note right of browser: The typical chain of events between browser and server occurs
+    Note right of browser: Browser makes GET request and the typical chain of events between browser and server occurs
 ```
