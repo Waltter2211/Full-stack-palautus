@@ -4,7 +4,6 @@ sequenceDiagram
     participant server
     
     browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/notes
-    Note right of browser: Browser makes GET request and the typical chain of events between browser and server occurs
     activate server
     server-->>browser: HTML document
     deactivate server
