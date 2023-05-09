@@ -1,12 +1,10 @@
 import { useState } from 'react'
 
 const Display = (props) => {
-  console.log(props.anecdotes)
   return (
     <div>
       <p>{props.anecdotes}</p>
       <p>{props.votes}</p>
-      <p>{props.points}</p>
     </div>
   )
 }
@@ -31,7 +29,6 @@ const App = () => {
    
   const [selected, setSelected] = useState(0)
   const [votes, setVotes] = useState(0)
-  const points = [0, 0, 0, 0, 0, 0, 0, 0]
 
   return (
     <div>
