@@ -32,7 +32,7 @@ const App = () => {
 
   return (
     <div>
-      <Display anecdotes={anecdotes[selected]} votes={votes} points={points} />
+      <Display anecdotes={anecdotes[selected]} votes={votes} />
       <Button handleClick={() => setVotes(votes + 1)} text="vote" />
       <Button handleClick={() => setSelected(Math.floor(Math.random()*anecdotes.length))} text="next anecdote" />
     </div>
