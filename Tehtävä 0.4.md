@@ -7,8 +7,6 @@ sequenceDiagram
     activate server
     server-->>browser: reload page
     deactivate server
-    
-    Note page reloads with new message
 
     browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/notes
     activate server
