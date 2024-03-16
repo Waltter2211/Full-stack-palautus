@@ -1,5 +1,24 @@
-import { useEffect } from 'react'
 import { useState } from 'react'
+
+const MostVotes = ({ anecdote, votes }) => {
+  
+  if (anecdote !== "" && votes !== 0) {
+    return (
+      <div>
+        <h1>Anecdote with most votes</h1>
+        <p>{anecdote}</p>
+        <p>has {votes} votes</p>
+      </div>
+    )
+  }
+  else {
+    return (
+      <div>
+        <h1>Anecdote with most votes</h1>
+      </div>
+    )
+  }
+}
 
 const App = () => {
   const anecdotes = [
@@ -16,8 +35,13 @@ const App = () => {
   const pointsArray = new Uint8Array(anecdotes.length)
   const [selected, setSelected] = useState(0)
   const [points, setPoints] = useState(pointsArray)
+  const [topAnecdote, setTopAnecdote] = useState("")
+
+  let [votes, setVotes] = useState(0)
 
   return (
+    <>
+    <h1>Anecdote of the day</h1>
     <div>
       {anecdotes[selected]}<br />
       {points[selected]}<br />
@@ -29,8 +53,14 @@ const App = () => {
         let copy = [...points]
         copy[selected] += 1
         setPoints(copy)
+        if (copy[selected] > votes) {
+          setVotes(votes += 1)
+          setTopAnecdote(anecdotes[selected])
+        }
       }}>vote anecdote</button>
     </div>
+    <MostVotes anecdote={topAnecdote} votes={votes} />
+    </>
   )
 }
 
