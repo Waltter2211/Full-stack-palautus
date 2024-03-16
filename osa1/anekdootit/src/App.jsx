@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { useState } from 'react'
 
 const App = () => {
@@ -11,16 +12,24 @@ const App = () => {
     'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when dianosing patients.',
     'The only way to go fast, is to go well.'
   ]
-   
+
+  const pointsArray = new Uint8Array(anecdotes.length)
   const [selected, setSelected] = useState(0)
+  const [points, setPoints] = useState(pointsArray)
 
   return (
     <div>
       {anecdotes[selected]}<br />
+      {points[selected]}<br />
       <button onClick={() => {
         const number = Math.floor(Math.random()*8)
         setSelected(number)
       }}>next anecdote</button>
+      <button onClick={() => {
+        let copy = [...points]
+        copy[selected] += 1
+        setPoints(copy)
+      }}>vote anecdote</button>
     </div>
   )
 }
