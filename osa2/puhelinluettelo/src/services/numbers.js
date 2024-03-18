@@ -8,8 +8,13 @@ const getNumbers = () => {
 }
 
 const addNumber = (newPersonObj) => {
-    const request = axios.post("http://localhost:3001/persons", newPersonObj)
+    const request = axios.post(baseUrl, newPersonObj)
     return request.then(response => response.data)
 }
 
-export default {getNumbers, addNumber}
+const deleteNumber = (id) => {
+    const request = axios.delete(`${baseUrl}/${id}`)
+    return request.then(response => response.data)
+}
+
+export default {getNumbers, addNumber, deleteNumber}

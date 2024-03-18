@@ -40,6 +40,20 @@ const App = () => {
     }
   }
 
+  const handleDelete = (id) => {
+    const foundPerson = persons.find((person) => person.id === id)
+    if (confirm(`Delete ${foundPerson.name}`)) {
+      numberService.deleteNumber(id)
+      .then((data) => {
+        const filteredArr = persons.filter((person) => {
+          return person.id !== id
+        })
+        setPersons(filteredArr)
+      })
+      .catch((err) => {console.log(err)})
+    }
+  }
+
   useEffect(() => {
     numberService.getNumbers()
     .then((data) => {
@@ -54,9 +68,9 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
       <Filter handleSearchInput={handleSearchInput} />
-      <PersonForm handleNameInput={handleNameInput} handleNumberInput={handleNumberInput} onSubmit={onSubmit} />
+      <PersonForm handleNameInput={handleNameInput} newName={newName} handleNumberInput={handleNumberInput} newNumber={newNumber} onSubmit={onSubmit} />
       <h3>Numbers</h3>
-      <Persons persons={persons} />
+      <Persons persons={persons} handleDelete={handleDelete} />
     </div>
   )
 
