@@ -3,11 +3,23 @@ import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
 import numberService from './services/numbers'
+import Notification from './components/Notification'
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
+  const [notification, setNotification] = useState({
+    type: "",
+    text: ""
+  })
+
+  const showNotification = (type, text) => {
+    setNotification({type, text})
+    setTimeout(() => {
+      setNotification({style:"", text:""})
+    }, 5000)
+  }
 
   const handleNameInput = event => setNewName(event.target.value)
   const handleNumberInput = event => setNewNumber(event.target.value)
@@ -36,9 +48,11 @@ const App = () => {
             setPersons(data)
             setNewName('')
             setNewNumber('')
+            showNotification("message", `Updated ${updatedPerson.name}`)
           })
           .catch((err) => {
             console.log(err)
+            showNotification("error", "Error while updating number")
           })
         })
       }
@@ -52,6 +66,7 @@ const App = () => {
         numberService.getNumbers()
           .then((data) => {
             setPersons(data)
+            showNotification("message", `Added ${newName}`)
           })
           .catch((err) => {
             console.log(err)
@@ -59,6 +74,7 @@ const App = () => {
         })
       .catch((err) => {
         console.log(err)
+        showNotification("error", "Error adding number")
       })
     }
   }
@@ -72,8 +88,12 @@ const App = () => {
           return person.id !== id
         })
         setPersons(filteredArr)
+        showNotification("message", "Successfully deleted number")
       })
-      .catch((err) => {console.log(err)})
+      .catch((err) => {
+        console.log(err)
+        showNotification("error", "Error deleting number")
+      })
     }
   }
 
@@ -90,6 +110,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification style={notification.type} text={notification.text} />
       <Filter handleSearchInput={handleSearchInput} />
       <PersonForm handleNameInput={handleNameInput} newName={newName} handleNumberInput={handleNumberInput} newNumber={newNumber} onSubmit={onSubmit} />
       <h3>Numbers</h3>
