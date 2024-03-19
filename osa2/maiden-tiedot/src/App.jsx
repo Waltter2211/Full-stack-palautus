@@ -8,6 +8,16 @@ function App() {
   const [singleCountry, setSingleCountry] = useState([])
   const [message, setMessage] = useState('')
 
+  const handleClick = (name) => {
+    setMessage('')
+      countriesService.getOneCountry(name)
+      .then((data) => {
+        console.log(data)
+        setCountries([data])
+        setSingleCountry([data])
+    })
+  }
+
   const handleInput = (event) => {
     const regex = new RegExp(event.target.value, 'i')
     const foundCountries = countries.filter((country) => {
@@ -25,11 +35,10 @@ function App() {
     else if (foundCountries.length >= 10 && event.target.value !== '') {
       setMessage('Too many matches please specify search more')
     }
-    else if (foundCountries.length === 1 && event.target.value !== '') {
+    else if (foundCountries.length === 1) {
       setMessage('')
       countriesService.getOneCountry(foundCountries[0].name.common)
       .then((data) => {
-        console.log(data)
         setCountries([data])
         setSingleCountry([data])
       })
@@ -50,7 +59,7 @@ function App() {
   }, [])
 
   const mapped = countries.map((country, i) => {
-    return <p key={i}>{country.name.common}, {i}</p>
+    return <div key={i}><p>{country.name.common}</p><button onClick={() => {handleClick(country.name.common)}}>show</button></div>
   })
 
   const single = singleCountry.map((country, i) => {
