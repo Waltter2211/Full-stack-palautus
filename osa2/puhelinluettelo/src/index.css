@@ -2,6 +2,8 @@
     border: 2px solid red;
     background-color: grey;
     color: red;
+    padding: 5px;
+    font-size: 30px;
     border-radius: 5px;
 }
 

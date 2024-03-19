@@ -52,8 +52,11 @@ const App = () => {
           })
           .catch((err) => {
             console.log(err)
-            showNotification("error", "Error while updating number")
           })
+        })
+        .catch((err) => {
+          console.log(err)
+          showNotification("error", "Error while updating number")
         })
       }
     }
@@ -70,6 +73,7 @@ const App = () => {
           })
           .catch((err) => {
             console.log(err)
+            showNotification("error", "Error updating number")
           })
         })
       .catch((err) => {
