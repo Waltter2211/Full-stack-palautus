@@ -12,7 +12,7 @@ beforeEach(async () => {
     await Blog.insertMany(helper.initialBlogs)
 })
 
-describe('api tests', () => {
+describe('api tests getting blogs', () => {
     test('blogs are returned as json', async () => {
         await api
         .get('/api/blogs')
@@ -25,7 +25,9 @@ describe('api tests', () => {
         
         assert.strictEqual(response.body.length, helper.initialBlogs.length)
     })
+})
 
+describe('api tests creating blog', () => {
     test('id is not _id', async () => {
         const response = await api.get('/api/blogs')
         assert(response.body[0].hasOwnProperty('id'))
@@ -71,6 +73,24 @@ describe('api tests', () => {
         const votes = response.body.map(r => r.likes)
 
         assert(votes[votes.length-1] === 0)
+    })
+})
+
+describe('deletion of a note', () => {
+    test('succeeds with status code 204 if id is valid', async () => {
+      const blogsAtStart = await helper.blogsInDb()
+      const blogToDelete = blogsAtStart[0]
+
+      await api
+        .delete(`/api/blogs/${blogToDelete.id}`)
+        .expect(204)
+
+      const blogsAtEnd = await helper.blogsInDb()
+
+      assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length - 1)
+
+      const title = blogsAtEnd.map(r => r.title)
+      assert(!title.includes(blogToDelete.title))
     })
 })
 
