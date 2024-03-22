@@ -52,6 +52,7 @@ const App = () => {
           })
           .catch((err) => {
             console.log(err)
+            showNotification("error", "Error while updating number")
           })
         })
         .catch((err) => {
@@ -73,12 +74,17 @@ const App = () => {
           })
           .catch((err) => {
             console.log(err)
-            showNotification("error", "Error updating number")
+            showNotification("error", "Error adding number")
           })
         })
       .catch((err) => {
         console.log(err)
-        showNotification("error", "Error adding number")
+        if (err.response.status === 400) {
+          showNotification("error", err.response.data)
+        }
+        else if (err.response.status === 500) {
+          showNotification("error", err.response.data.error)
+        }
       })
     }
   }
@@ -88,11 +94,15 @@ const App = () => {
     if (confirm(`Delete ${foundPerson.name}`)) {
       numberService.deleteNumber(id)
       .then((data) => {
-        const filteredArr = persons.filter((person) => {
-          return person.id !== id
+        numberService.getNumbers()
+        .then((data) => {
+          setPersons(data)
+          showNotification("message", `Successfully deleted number`)
         })
-        setPersons(filteredArr)
-        showNotification("message", "Successfully deleted number")
+        .catch((err) => {
+          console.log(err)
+          showNotification("error", "Error deleting number")
+        })
       })
       .catch((err) => {
         console.log(err)
