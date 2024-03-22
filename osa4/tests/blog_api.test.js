@@ -53,6 +53,25 @@ describe('api tests', () => {
       
         assert(title.includes('Test Title123'))
     })
+
+    test('blog always has 0 likes', async () => {
+        const newBlog = {
+            title:"Test Title123",
+            author:"Test Author",
+            url:"Test URL"
+        }
+
+        await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(201)
+        .expect('Content-Type', /application\/json/)
+
+        const response = await api.get('/api/blogs')
+        const votes = response.body.map(r => r.likes)
+
+        assert(votes[votes.length-1] === 0)
+    })
 })
 
 after(async () => {
