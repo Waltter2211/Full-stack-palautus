@@ -15,7 +15,15 @@ const totalLikes = (blogs) => {
   
 }
 
+const favoriteBlog = (blogs) => {
+  const mostLikesBlog = blogs.sort((blogA, blogB) => blogB.likes - blogA.likes).shift()
+  delete mostLikesBlog._id
+  delete mostLikesBlog.__v
+  return mostLikesBlog
+}
+
 module.exports = {
   dummy,
-  totalLikes
+  totalLikes,
+  favoriteBlog
 }
