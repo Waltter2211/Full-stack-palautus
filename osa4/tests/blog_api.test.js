@@ -30,6 +30,29 @@ describe('api tests', () => {
         const response = await api.get('/api/blogs')
         assert(response.body[0].hasOwnProperty('id'))
     })
+
+    test('a valid note can be added ', async () => {
+        const newBlog = {
+          
+            title:"Test Title123",
+            author:"Test Author",
+            url:"Test URL",
+            likes:32
+        }
+      
+        await api
+          .post('/api/blogs')
+          .send(newBlog)
+          .expect(201)
+          .expect('Content-Type', /application\/json/)
+      
+        const response = await api.get('/api/blogs')
+        const title = response.body.map(r => r.title)
+      
+        assert.strictEqual(response.body.length, helper.initialBlogs.length + 1)
+      
+        assert(title.includes('Test Title123'))
+    })
 })
 
 after(async () => {
