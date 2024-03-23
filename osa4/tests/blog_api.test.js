@@ -3,6 +3,7 @@ const assert = require('node:assert')
 const mongoose = require('mongoose')
 const supertest = require('supertest')
 const Blog = require('../models/blog')
+const User = require('../models/user')
 const app = require('../app')
 const helper = require('./test_helper')
 const api = supertest(app)
@@ -10,6 +11,8 @@ const api = supertest(app)
 beforeEach(async () => {
     await Blog.deleteMany({})
     await Blog.insertMany(helper.initialBlogs)
+    await User.deleteMany({})
+    await User.insertMany(helper.initialUsers)
 })
 
 describe('api tests getting blogs', () => {
@@ -91,6 +94,35 @@ describe('deletion of a note', () => {
 
       const title = blogsAtEnd.map(r => r.title)
       assert(!title.includes(blogToDelete.title))
+    })
+})
+
+describe('user tests', () => {
+    test('password needs to be 3 characters long', async () => {
+      const user = {
+        username:"testingusername",
+        name:"testing",
+        password:"as"
+      }
+
+      await api
+      .post('/api/users')
+      .send(user)
+      .expect(403)
+    })
+
+    test('username must be unique', async () => {
+        const user = {
+            username:"Test Title",
+            name:"testing",
+            password:"asd"
+        }
+
+        await api
+        .post('/api/users')
+        .send(user)
+        .expect(403)
+        .expect({error: 'username must be unique'})
     })
 })
 
