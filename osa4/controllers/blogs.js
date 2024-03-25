@@ -24,13 +24,17 @@ blogsRouter.post('/', async (request, response) => {
 
   const user = await User.findById(decodedToken.id)
   const blog = new Blog(request.body)
-  blog.user = user._id
-  
-  user.blogs = user.blogs.concat(blog._id)
-  await user.save()
-  await blog.save()
-  
-  response.status(201).json(blog)
+  console.log(blog)
+  if (blog.title === '' || blog.author === '' || blog.url === '') {
+    response.status(500).send({ error:'please fill all the fields' })
+  }
+  else {
+    blog.user = user._id
+    user.blogs = user.blogs.concat(blog._id)
+    await user.save()
+    await blog.save()
+    response.status(201).json(blog)
+  }
 })
 
 blogsRouter.delete('/:id', async (request, response) => {
