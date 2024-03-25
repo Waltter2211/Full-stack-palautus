@@ -24,10 +24,10 @@ usersRouter.post('/', async (request, response) => {
     })
 
     try {
-        const savedUser = await user.save()
-        response.status(201).json(savedUser)
+      const savedUser = await user.save()
+      response.status(201).json(savedUser)
     } catch (error) {
-        response.status(403).send({ error: "username must be unique" })
+      response.status(403).send({ error: "username must be unique" })
     }
   }
 
