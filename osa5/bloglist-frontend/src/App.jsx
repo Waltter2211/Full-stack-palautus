@@ -44,8 +44,6 @@ const App = () => {
     )
   }
 
-  console.log(blogFormRef)
-
   return (
     <div>
     <h2>blogs</h2>
