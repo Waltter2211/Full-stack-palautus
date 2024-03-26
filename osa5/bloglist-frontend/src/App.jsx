@@ -8,7 +8,6 @@ import Togglable from './components/Togglable'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  
   const [user, setUser] = useState(null)
   const [message, setMessage] = useState({
     type: '',
@@ -21,7 +20,7 @@ const App = () => {
       blogs.sort((blogsA, blogsB) => blogsB.likes - blogsA.likes)
       setBlogs( blogs )
     })  
-  }, [])
+  }, [blogs])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
@@ -55,7 +54,7 @@ const App = () => {
       <BlogForm message={message} blogs={blogs} user={user} setBlogs={setBlogs} setMessage={setMessage} blogFormRef={blogFormRef.current} />
     </Togglable>
     {blogs.map(blog =>
-      <Blog key={blog.id} blog={blog} />
+      <Blog key={blog.id} blog={blog} user={user} />
     )}
     </div>
   )
