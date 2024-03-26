@@ -50,8 +50,8 @@ function LoginForm({ message, setMessage, setUser }) {
       <h2>Log in to application</h2>
       {message.text !== ''? <p className={message.type}>{message.text}</p>:<p></p>}
       <form onSubmit={handleLogin}>
-          username <input type='text' name='username' onChange={({ target }) => setUsername(target.value)} />
-          password <input type='password' name='password' onChange={({ target }) => setPassword(target.value)} />
+          <label>username <input type='text' name='username' onChange={({ target }) => setUsername(target.value)} /></label>
+          <label>password <input type='password' name='password' onChange={({ target }) => setPassword(target.value)} /></label>
         <button>login</button>
       </form>
     </div>
