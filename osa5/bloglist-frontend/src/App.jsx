@@ -15,6 +15,51 @@ const App = () => {
   })
   const blogFormRef = useRef()
 
+  const [title, setTitle] = useState('')
+  const [author, setAuthor] = useState('')
+  const [url, setUrl] = useState('')
+
+  const handleBlogPost = async (event) => {
+
+    event.preventDefault()
+    const newObject = {
+      title,
+      author,
+      url
+    }
+    try {
+      /* blogFormRef.toggleVisibility() */
+      const blog = await blogService.create(newObject)
+      setBlogs(blogs.concat(newObject))
+      setTitle('')
+      setAuthor('')
+      setUrl('')
+      setMessage({
+        type: 'message',
+        text: `a new blog ${blog.title} by ${blog.author} added`
+      })
+      setTimeout(() => {
+        setMessage({
+          type: '',
+          text: ''
+        })
+      }, 5000)
+      console.log(blog)
+    } catch (exception) {
+      console.log(exception)
+      /* setMessage({
+        type: 'error',
+        text: exception.response.data.error
+      }) */
+      setTimeout(() => {
+        setMessage({
+          type: '',
+          text: ''
+        })
+      }, 5000)
+    }
+  }
+
   useEffect(() => {
     blogService.getAll().then(blogs => {
       blogs.sort((blogsA, blogsB) => blogsB.likes - blogsA.likes)
@@ -30,6 +75,10 @@ const App = () => {
       blogService.setToken(user.token)
     }
   }, [])
+
+  const handleBlogUpdate = async () => {
+    await blogService.update(blog)
+  }
 
   const handleLogout = () => {
     localStorage.clear()
@@ -51,10 +100,10 @@ const App = () => {
       <p>{user.name} logged in</p>
       <button onClick={handleLogout}>logout</button>
       <Togglable buttonLabel='add new' ref={blogFormRef}>
-        <BlogForm message={message} blogs={blogs} user={user} setBlogs={setBlogs} setMessage={setMessage} blogFormRef={blogFormRef.current} />
+        <BlogForm setTitle={setTitle} setAuthor={setAuthor} setUrl={setUrl} message={message} blogs={blogs} user={user} setBlogs={setBlogs} setMessage={setMessage} handleBlogPost={handleBlogPost} title={title} author={author} url={url} />
       </Togglable>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} user={user} />
+        <Blog key={blog.id} blog={blog} user={user} handleBlogUpdate={handleBlogUpdate} />
       )}
     </div>
   )
