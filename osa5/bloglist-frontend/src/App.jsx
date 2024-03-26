@@ -19,7 +19,7 @@ const App = () => {
     blogService.getAll().then(blogs => {
       blogs.sort((blogsA, blogsB) => blogsB.likes - blogsA.likes)
       setBlogs( blogs )
-    })  
+    })
   }, [blogs])
 
   useEffect(() => {
@@ -46,16 +46,16 @@ const App = () => {
 
   return (
     <div>
-    <h2>blogs</h2>
-    {message.text !== ''? <p className={message.type}>{message.text}</p>:<p></p>}
-    <p>{user.name} logged in</p>
-    <button onClick={handleLogout}>logout</button>
-    <Togglable buttonLabel='add new' ref={blogFormRef}>
-      <BlogForm message={message} blogs={blogs} user={user} setBlogs={setBlogs} setMessage={setMessage} blogFormRef={blogFormRef.current} />
-    </Togglable>
-    {blogs.map(blog =>
-      <Blog key={blog.id} blog={blog} user={user} />
-    )}
+      <h2>blogs</h2>
+      {message.text !== ''? <p className={message.type}>{message.text}</p>:<p></p>}
+      <p>{user.name} logged in</p>
+      <button onClick={handleLogout}>logout</button>
+      <Togglable buttonLabel='add new' ref={blogFormRef}>
+        <BlogForm message={message} blogs={blogs} user={user} setBlogs={setBlogs} setMessage={setMessage} blogFormRef={blogFormRef.current} />
+      </Togglable>
+      {blogs.map(blog =>
+        <Blog key={blog.id} blog={blog} user={user} />
+      )}
     </div>
   )
 }
