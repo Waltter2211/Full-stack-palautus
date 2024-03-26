@@ -1,5 +1,6 @@
 const { test, expect, beforeEach, describe } = require('@playwright/test')
 const exp = require('constants')
+const { loginToApp } = require('./helper')
 
 
 describe('Note app', () => {
@@ -32,35 +33,27 @@ describe('Note app', () => {
 
     describe('Login', () => {
         test('succeeds with correct credentials', async ({ page }) => {
-            const openBtn = await page.getByRole('button', { name: 'login' })
-            await openBtn.click()
-    
-            const usernameField = await page.getByText('username')
-            await usernameField.fill('mluukkai')
-            const passwordField = await page.getByText('password')
-            await passwordField.fill('salainen')
-
-            const loginBtn = await page.getByRole('button', { name: 'login' })
-            await loginBtn.click()
-
-            const blogText = await page.getByText('Blogs')
-            await expect(blogText).toBeVisible()
+            await loginToApp(page, 'mluukkai', 'salainen')
+            await expect(page.getByText('logged in as mluukkai')).toBeVisible()
         })
     
         test('fails with wrong credentials', async ({ page }) => {
-            const openBtn = await page.getByRole('button', { name: 'login' })
-            await openBtn.click()
-    
-            const usernameField = await page.getByText('username')
-            await usernameField.fill('mluukkai')
-            const passwordField = await page.getByText('password')
-            await passwordField.fill('wrongpass')
+            await loginToApp(page, 'mluukkai', 'wrongpass')
 
-            const loginBtn = await page.getByRole('button', { name: 'login' })
-            await loginBtn.click()
-
-            const errorField = await page.getByText('invalid username or password')
-            await expect(errorField).toBeVisible()
+            const errorDiv = await page.locator('.error')
+            await expect(errorDiv).toContainText('invalid username or password')
+            await expect(errorDiv).toHaveCSS('color', 'rgb(255, 0, 0)')
+            await expect(await page.getByText('logged in as mluukkai')).not.toBeVisible()
         })
     })
+
+    describe('When logged in', () => {
+        beforeEach(async ({ page }) => {
+            await loginToApp(page, 'mluukkai', 'salainen')
+        })
+      
+        test('a new blog can be created', async ({ page }) => {
+          // ...
+        })
+      })
 })
