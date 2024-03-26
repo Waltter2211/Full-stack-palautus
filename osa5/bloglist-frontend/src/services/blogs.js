@@ -31,7 +31,6 @@ const update = async updatedBlog => {
 }
 
 const remove = async removedBlog => {
-  console.log(removedBlog)
   const config = {
     headers: { Authorization: token }
   }
