@@ -43,7 +43,7 @@ describe('Note app', () => {
             const errorDiv = await page.locator('.error')
             await expect(errorDiv).toContainText('invalid username or password')
             await expect(errorDiv).toHaveCSS('color', 'rgb(255, 0, 0)')
-            await expect(await page.getByText('logged in as mluukkai')).not.toBeVisible()
+            await expect(page.getByText('logged in as mluukkai')).not.toBeVisible()
         })
     })
 
@@ -53,7 +53,19 @@ describe('Note app', () => {
         })
       
         test('a new blog can be created', async ({ page }) => {
-          // ...
+            const addNewBtn = await page.getByRole('button', { name: 'add new' })
+            await addNewBtn.click()
+            const titleInput = await page.getByText('title')
+            const authorInput = await page.getByText('author')
+            const urlInput = await page.getByText('url')
+
+            await titleInput.fill('testTitle')
+            await authorInput.fill('testAuthor')
+            await urlInput.fill('testUrl')
+
+            const createBtn = page.getByRole('button', { name: 'create' })
+            await createBtn.click()
+            await expect(page.getByTestId('testBlog')).toBeVisible()
         })
       })
 })

@@ -23,7 +23,7 @@ const Blog = ({ blog, user }) => {
   }
 
   return (
-    <div>
+    <div data-testid="testBlog">
       {visible? <div style={style}>
         <p className='blog'>{blog.title}<button onClick={() => setVisible(!visible)}>hide</button></p>
         <p data-testid="url">{blog.url}</p>

@@ -52,9 +52,9 @@ function BlogForm({ setMessage, blogs, setBlogs, blogFormRef }) {
     <div>
       <h2>create new</h2>
       <form onSubmit={handleBlogPost}>
-        title<input type='text' name='title' value={title} onChange={({ target }) => setTitle(target.value)} />
-        author<input type='text' name='author' value={author} onChange={({ target }) => setAuthor(target.value)} />
-        url<input type='text' name='url' value={url} onChange={({ target }) => setUrl(target.value)} />
+        <label>title<input type='text' name='title' value={title} onChange={({ target }) => setTitle(target.value)} /></label>
+        <label>author <input type='text' name='author' value={author} onChange={({ target }) => setAuthor(target.value)} /></label>
+        <label>url<input type='text' name='url' value={url} onChange={({ target }) => setUrl(target.value)} /></label>
         <button>create</button>
       </form>
     </div>
