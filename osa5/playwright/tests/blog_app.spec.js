@@ -1,6 +1,6 @@
 const { test, expect, beforeEach, describe } = require('@playwright/test')
 const exp = require('constants')
-const { loginToApp } = require('./helper')
+const { loginToApp, createNewBlog } = require('./helper')
 
 
 describe('Note app', () => {
@@ -53,19 +53,25 @@ describe('Note app', () => {
         })
       
         test('a new blog can be created', async ({ page }) => {
-            const addNewBtn = await page.getByRole('button', { name: 'add new' })
-            await addNewBtn.click()
-            const titleInput = await page.getByText('title')
-            const authorInput = await page.getByText('author')
-            const urlInput = await page.getByText('url')
-
-            await titleInput.fill('testTitle')
-            await authorInput.fill('testAuthor')
-            await urlInput.fill('testUrl')
-
-            const createBtn = page.getByRole('button', { name: 'create' })
-            await createBtn.click()
+            await createNewBlog(page)
             await expect(page.getByTestId('testBlog')).toBeVisible()
         })
-      })
+    })
+
+    describe('When blog is made', () => {
+        beforeEach(async ({ page }) => {
+            await loginToApp(page, 'mluukkai', 'salainen')
+            await createNewBlog(page)
+        })
+
+        test('a new blog can be liked', async ({ page }) => {
+            const viewBtn = page.getByRole('button', { name: 'view' })
+            await viewBtn.click()
+
+            const likeBtn = page.getByRole('button', { name: 'like' })
+            await likeBtn.click()
+
+            await expect(page.getByTestId('likes')).toContainText('1')
+        })
+    })
 })
