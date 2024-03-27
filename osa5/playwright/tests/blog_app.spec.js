@@ -5,14 +5,21 @@ const { loginToApp, createNewBlog } = require('./helper')
 
 describe('Note app', () => {
     beforeEach(async ({ page, request }) => {
-      await request.post('http:localhost:3003/api/testing/reset')
-      await request.post('http://localhost:3003/api/users', {
-        data: {
-          name: 'Matti Luukkainen',
-          username: 'mluukkai',
-          password: 'salainen'
-        }
-      })
+        await request.post('http:localhost:3003/api/testing/reset')
+        await request.post('http://localhost:3003/api/users', {
+            data: {
+                name: 'Matti Luukkainen',
+                username: 'mluukkai',
+                password: 'salainen'
+            }
+        })
+        await request.post('http://localhost:3003/api/users', {
+            data: {
+                name: 'testaajaname',
+                username: 'testaaja',
+                password: 'testaajapass'
+            }
+        })
   
       await page.goto('http://localhost:5173')
     })
@@ -54,7 +61,7 @@ describe('Note app', () => {
       
         test('a new blog can be created', async ({ page }) => {
             await createNewBlog(page)
-            await expect(page.getByTestId('testBlog')).toBeVisible()
+            await expect(page.getByTestId('testBlog').first()).toBeVisible()
         })
     })
 
@@ -72,6 +79,33 @@ describe('Note app', () => {
             await likeBtn.click()
 
             await expect(page.getByTestId('likes')).toContainText('1')
+        })
+
+        test('a blog can be deleted', async ({ page }) => {
+            page.on('dialog', async dialog => {
+                console.log(dialog.message())
+                await dialog.accept()
+            })
+            const viewBtn = page.getByRole('button', { name: 'view' })
+            await viewBtn.click()
+
+            const removeBtn = page.getByRole('button', { name: 'remove' })
+            await removeBtn.click()
+            
+            await expect(page.getByTestId('testBlog')).not.toBeVisible()
+        })
+
+        test('only user that has made blog can see remove option', async ({ page }) => {
+            
+            const logoutBtn = page.getByRole('button', { name: 'logout' })
+            await logoutBtn.click()
+
+            await loginToApp(page, 'testaaja', 'testaajapass')
+            
+            const viewBtn = page.getByRole('button', { name: 'view' })
+            await viewBtn.click()
+
+            await expect(page.getByRole('button', { name: 'remove' })).not.toBeVisible()
         })
     })
 })

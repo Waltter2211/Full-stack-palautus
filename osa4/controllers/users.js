@@ -10,6 +10,8 @@ usersRouter.get('/', async (request, response) => {
 usersRouter.post('/', async (request, response) => {
   const { username, name, password } = request.body
 
+  console.log(request.body)
+
   if (password.length < 3) {
     response.status(403).send({ error: "password must be atleast 3 characters long" })
   }

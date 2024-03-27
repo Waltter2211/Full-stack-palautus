@@ -14,9 +14,9 @@ const loginToApp = async (page, username, password) => {
 const createNewBlog = async (page) => {
     const addNewBtn = await page.getByRole('button', { name: 'add new' })
     await addNewBtn.click()
-    const titleInput = await page.getByText('title')
-    const authorInput = await page.getByText('author')
-    const urlInput = await page.getByText('url')
+    const titleInput = await page.getByTestId('title')
+    const authorInput = await page.getByTestId('author')
+    const urlInput = await page.getByTestId('url')
 
     await titleInput.fill('testTitle')
     await authorInput.fill('testAuthor')
