@@ -5,10 +5,10 @@ import { removeNotification, showNotification } from '../reducers/notificationRe
 function AnecdoteList() {
     const anecdotes = useSelector(state => {
         if (state.filter === 'ALL') {
-            return state.anecdotes
+          return state.anecdotes
         }
         else {
-            return state.anecdotes.filter((anecdote) => anecdote.content.includes(state.filter))
+          return state.anecdotes.filter((anecdote) => anecdote.content.includes(state.filter))
         }
     })
     const dispatch = useDispatch()
