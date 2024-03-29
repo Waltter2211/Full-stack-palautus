@@ -7,4 +7,10 @@ const getAnecdotes = async () => {
     return response.data
 }
 
-export default { getAnecdotes }
+const addAnecdote = async (newObject) => {
+    const anecdote = {content: newObject, id: Math.floor(Math.random()*1000), votes: 0}
+    const response = await axios.post(baseUrl, anecdote)
+    return response.data
+}
+
+export default { getAnecdotes, addAnecdote }
