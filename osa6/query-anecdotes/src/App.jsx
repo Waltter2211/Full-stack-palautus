@@ -38,6 +38,7 @@ const App = () => {
   }
 
   const anecdotes = result.data
+  anecdotes.sort((anecdoteA, anecdoteB) => anecdoteB.votes - anecdoteA.votes)
 
   return (
     <div>

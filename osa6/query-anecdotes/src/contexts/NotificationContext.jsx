@@ -6,6 +6,8 @@ const notificationReducer = (state, action) => {
         return `${action.payload} added`
     case "SHOW":
         return `${action.payload.content} voted`
+    case "ERROR":
+        return action.payload
     case "HIDE":
         return action.payload
     default:
