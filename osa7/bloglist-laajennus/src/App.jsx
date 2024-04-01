@@ -41,10 +41,7 @@ const App = () => {
   if (user === null) {
     return (
       <Togglable buttonLabel="login">
-        <LoginForm
-          /* setUser={setUser} */
-          
-        />
+        <LoginForm />
       </Togglable>
     );
   }
