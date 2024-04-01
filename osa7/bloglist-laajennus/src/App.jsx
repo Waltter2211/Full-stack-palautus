@@ -5,24 +5,25 @@ import LoginForm from "./components/LoginForm";
 import "./App.css";
 import BlogForm from "./components/BlogForm";
 import Togglable from "./components/Togglable";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setBlogs } from "./reducers/BlogReducer";
 
 const App = () => {
-  const notification = useSelector(state => state.notification)
-  const [blogs, setBlogs] = useState([]);
+  const dispatch = useDispatch()
+  const notification = useSelector(state => state.notifications)
+  const blogs = useSelector(state => state.blogs)
+  /* const [blogs, setBlogs] = useState([]); */
   const [user, setUser] = useState(null);
-  const [message, setMessage] = useState({
-    type: "",
-    text: "",
-  });
   const blogFormRef = useRef();
 
   useEffect(() => {
     blogService.getAll().then((blogs) => {
       blogs.sort((blogsA, blogsB) => blogsB.likes - blogsA.likes);
-      setBlogs(blogs);
+      /* setBlogs(blogs); */
+      dispatch(setBlogs(blogs))
+      console.log(blogs)
     });
-  }, [blogs]);
+  }, []);
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedBlogappUser");
@@ -58,7 +59,7 @@ const App = () => {
         <BlogForm
           blogs={blogs}
           user={user}
-          setBlogs={setBlogs}
+          /* setBlogs={setBlogs} */
           blogFormRef={blogFormRef.current}
         />
       </Togglable>

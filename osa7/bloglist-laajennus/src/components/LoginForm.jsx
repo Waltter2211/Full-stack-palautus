@@ -7,7 +7,7 @@ import { setNotification } from "../reducers/notificationReducer";
 
 function LoginForm({ setUser }) {
   const dispatch = useDispatch()
-  const notification = useSelector(state => state.notification)
+  const notification = useSelector(state => state.notifications)
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 

@@ -1,14 +1,15 @@
 import React from "react";
 import { useState } from "react";
 import blogService from "../services/blogs";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setNotification } from "../reducers/notificationReducer";
+import { addBlog } from "../reducers/BlogReducer";
 
-function BlogForm({ blogs, setBlogs, blogFormRef }) {
+function BlogForm({ blogFormRef }) {
+  const dispatch = useDispatch()
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [url, setUrl] = useState("");
-  const dispatch = useDispatch()
 
   const handleBlogPost = async (event) => {
     event.preventDefault();
@@ -20,7 +21,7 @@ function BlogForm({ blogs, setBlogs, blogFormRef }) {
     try {
       blogFormRef.toggleVisibility();
       const blog = await blogService.create(newObject);
-      setBlogs(blogs.concat(newObject));
+      dispatch(addBlog(blog))
       setTitle("");
       setAuthor("");
       setUrl("");
@@ -34,9 +35,7 @@ function BlogForm({ blogs, setBlogs, blogFormRef }) {
           text: '',
         }))
       }, 5000);
-      console.log(blog);
     } catch (exception) {
-      console.log(exception);
       dispatch(setNotification({
         type:'error', 
         text: exception.response.data.error
