@@ -12,14 +12,12 @@ const App = () => {
   const dispatch = useDispatch()
   const notification = useSelector(state => state.notifications)
   const blogs = useSelector(state => state.blogs)
-  /* const [blogs, setBlogs] = useState([]); */
   const [user, setUser] = useState(null);
   const blogFormRef = useRef();
 
   useEffect(() => {
     blogService.getAll().then((blogs) => {
       blogs.sort((blogsA, blogsB) => blogsB.likes - blogsA.likes);
-      /* setBlogs(blogs); */
       dispatch(setBlogs(blogs))
       console.log(blogs)
     });
@@ -59,7 +57,6 @@ const App = () => {
         <BlogForm
           blogs={blogs}
           user={user}
-          /* setBlogs={setBlogs} */
           blogFormRef={blogFormRef.current}
         />
       </Togglable>
