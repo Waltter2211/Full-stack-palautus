@@ -5,10 +5,11 @@ import LoginForm from "./components/LoginForm";
 import "./App.css";
 import BlogForm from "./components/BlogForm";
 import Togglable from "./components/Togglable";
+import { useSelector } from "react-redux";
 
 const App = () => {
+  const notification = useSelector(state => state.notification)
   const [blogs, setBlogs] = useState([]);
-
   const [user, setUser] = useState(null);
   const [message, setMessage] = useState({
     type: "",
@@ -41,8 +42,6 @@ const App = () => {
     return (
       <Togglable buttonLabel="login">
         <LoginForm
-          message={message}
-          setMessage={setMessage}
           setUser={setUser}
         />
       </Togglable>
@@ -52,20 +51,14 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
-      {message.text !== "" ? (
-        <p className={message.type}>{message.text}</p>
-      ) : (
-        <p></p>
-      )}
+      {notification.text !== '' && <p className={notification.type}>{notification.text}</p>}
       <p>{user.name} logged in</p>
       <button onClick={handleLogout}>logout</button>
       <Togglable buttonLabel="add new" ref={blogFormRef}>
         <BlogForm
-          message={message}
           blogs={blogs}
           user={user}
           setBlogs={setBlogs}
-          setMessage={setMessage}
           blogFormRef={blogFormRef.current}
         />
       </Togglable>

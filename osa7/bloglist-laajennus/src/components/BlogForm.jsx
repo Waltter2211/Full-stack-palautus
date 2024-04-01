@@ -1,11 +1,14 @@
 import React from "react";
 import { useState } from "react";
 import blogService from "../services/blogs";
+import { useDispatch } from "react-redux";
+import { setNotification } from "../reducers/notificationReducer";
 
-function BlogForm({ setMessage, blogs, setBlogs, blogFormRef }) {
+function BlogForm({ blogs, setBlogs, blogFormRef }) {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [url, setUrl] = useState("");
+  const dispatch = useDispatch()
 
   const handleBlogPost = async (event) => {
     event.preventDefault();
@@ -21,28 +24,28 @@ function BlogForm({ setMessage, blogs, setBlogs, blogFormRef }) {
       setTitle("");
       setAuthor("");
       setUrl("");
-      setMessage({
+      dispatch(setNotification({
         type: "message",
         text: `a new blog ${blog.title} by ${blog.author} added`,
-      });
+      }))
       setTimeout(() => {
-        setMessage({
-          type: "",
-          text: "",
-        });
+        dispatch(setNotification({
+          type: '',
+          text: '',
+        }))
       }, 5000);
       console.log(blog);
     } catch (exception) {
       console.log(exception);
-      setMessage({
-        type: "error",
-        text: exception.response.data.error,
-      });
+      dispatch(setNotification({
+        type:'error', 
+        text: exception.response.data.error
+      }))
       setTimeout(() => {
-        setMessage({
-          type: "",
-          text: "",
-        });
+        dispatch(setNotification({
+          type: '',
+          text: '',
+        }))
       }, 5000);
     }
   };

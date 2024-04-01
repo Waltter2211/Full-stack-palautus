@@ -2,8 +2,12 @@ import React, { useState } from "react";
 import loginService from "../services/login";
 import blogService from "../services/blogs";
 import PropTypes from "prop-types";
+import { useDispatch, useSelector } from "react-redux";
+import { setNotification } from "../reducers/notificationReducer";
 
-function LoginForm({ message, setMessage, setUser }) {
+function LoginForm({ setUser }) {
+  const dispatch = useDispatch()
+  const notification = useSelector(state => state.notification)
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -19,38 +23,34 @@ function LoginForm({ message, setMessage, setUser }) {
       setUser(user);
       setUsername("");
       setPassword("");
-      setMessage({
-        type: "message",
+      dispatch(setNotification({
+        type: 'message',
         text: `logged in as ${username}`,
-      });
+      }))
       setTimeout(() => {
-        setMessage({
-          type: "",
-          text: "",
-        });
+        dispatch(setNotification({
+          type: '',
+          text: '',
+        }))
       }, 5000);
     } catch (exception) {
       console.log(exception);
-      setMessage({
-        type: "error",
+      dispatch(setNotification({
+        type: 'error',
         text: exception.response.data.error,
-      });
+      }))
       setTimeout(() => {
-        setMessage({
-          type: "",
-          text: "",
-        });
+        dispatch(setNotification({
+          type: '',
+          text: '',
+        }))
       }, 5000);
     }
   };
   return (
     <div>
       <h2>Log in to application</h2>
-      {message.text !== "" ? (
-        <p className={message.type}>{message.text}</p>
-      ) : (
-        <p></p>
-      )}
+      {notification.text !== '' && <p className={notification.type}>{notification.text}</p>}
       <form onSubmit={handleLogin}>
         <label>
           username{" "}
@@ -74,10 +74,10 @@ function LoginForm({ message, setMessage, setUser }) {
   );
 }
 
-LoginForm.propTypes = {
+/* LoginForm.propTypes = {
   message: PropTypes.object.isRequired,
   setMessage: PropTypes.func.isRequired,
   setUser: PropTypes.func.isRequired,
-};
+}; */
 
 export default LoginForm;
