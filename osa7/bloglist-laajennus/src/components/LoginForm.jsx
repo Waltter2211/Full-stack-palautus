@@ -4,8 +4,9 @@ import blogService from "../services/blogs";
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
 import { setNotification } from "../reducers/notificationReducer";
+import { setUser } from "../reducers/userReducer";
 
-function LoginForm({ setUser }) {
+function LoginForm() {
   const dispatch = useDispatch()
   const notification = useSelector(state => state.notifications)
   const [username, setUsername] = useState("");
@@ -20,7 +21,7 @@ function LoginForm({ setUser }) {
       });
       window.localStorage.setItem("loggedBlogappUser", JSON.stringify(user));
       blogService.setToken(user.token);
-      setUser(user);
+      dispatch(setUser(user))
       setUsername("");
       setPassword("");
       dispatch(setNotification({
