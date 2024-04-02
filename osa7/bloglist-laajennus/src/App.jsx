@@ -8,11 +8,13 @@ import Togglable from "./components/Togglable";
 import { useDispatch, useSelector } from "react-redux";
 import { setBlogs } from "./reducers/BlogReducer";
 import { setUser } from "./reducers/userReducer";
+import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
+import Users from "./components/Users";
 
 const App = () => {
   const dispatch = useDispatch()
   const notification = useSelector(state => state.notifications)
-  const user = useSelector(state => state.users)
+  const user = useSelector(state => state.user)
   const blogs = useSelector(state => state.blogs)
   /* const [user, setUser] = useState(null); */
   const blogFormRef = useRef();
@@ -47,22 +49,32 @@ const App = () => {
   }
 
   return (
-    <div>
-      <h2>blogs</h2>
-      {notification.text !== '' && <p className={notification.type}>{notification.text}</p>}
-      {/* <p>{user.name} logged in</p> */}
-      <button onClick={handleLogout}>logout</button>
-      <Togglable buttonLabel="add new" ref={blogFormRef}>
-        <BlogForm
-          blogs={blogs}
-          user={user}
-          blogFormRef={blogFormRef.current}
-        />
-      </Togglable>
-      {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} user={user} />
-      ))}
-    </div>
+    <BrowserRouter>
+      <div>
+        <h2>blogs</h2>
+        <Link to='/users'>Users</Link>
+        {notification.text !== '' && <p className={notification.type}>{notification.text}</p>}
+        <p>{user.name} logged in</p>
+        <button onClick={handleLogout}>logout</button>
+      </div>
+      <Routes>
+        <Route path="/users" element={<Users />} />
+      </Routes>
+      <div>
+        <Togglable buttonLabel="add new" ref={blogFormRef}>
+          <BlogForm
+            blogs={blogs}
+            user={user}
+            blogFormRef={blogFormRef.current}
+          />
+        </Togglable>
+      </div>
+      <div>
+        {blogs.map((blog) => (
+          <Blog key={blog.id} blog={blog} user={user} />
+        ))}
+      </div>
+    </BrowserRouter>
   );
 };
 
