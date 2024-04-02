@@ -1,6 +1,7 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import Blog from "./components/Blog";
 import blogService from "./services/blogs";
+import usersService from './services/users'
 import LoginForm from "./components/LoginForm";
 import "./App.css";
 import BlogForm from "./components/BlogForm";
@@ -10,11 +11,14 @@ import { setBlogs } from "./reducers/BlogReducer";
 import { setUser } from "./reducers/userReducer";
 import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
 import Users from "./components/Users";
+import User from "./components/User";
+import { setUsers } from './reducers/usersReducer'
 
 const App = () => {
   const dispatch = useDispatch()
   const notification = useSelector(state => state.notifications)
   const user = useSelector(state => state.user)
+  const users = useSelector(state => state.users)
   const blogs = useSelector(state => state.blogs)
   /* const [user, setUser] = useState(null); */
   const blogFormRef = useRef();
@@ -25,6 +29,12 @@ const App = () => {
       dispatch(setBlogs(blogs))
     });
   }, []);
+
+  useEffect(() => {
+    usersService.getAllUsers().then((users) => {
+     dispatch(setUsers(users))
+    })
+  }, [blogs])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedBlogappUser");
@@ -58,7 +68,8 @@ const App = () => {
         <button onClick={handleLogout}>logout</button>
       </div>
       <Routes>
-        <Route path="/users" element={<Users />} />
+        <Route path="/users" element={<Users users={users} />} />
+        <Route path="/users/:id" element={<User users={users} />} />
       </Routes>
       <div>
         <Togglable buttonLabel="add new" ref={blogFormRef}>
