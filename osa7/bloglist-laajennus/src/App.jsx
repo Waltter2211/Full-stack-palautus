@@ -13,6 +13,7 @@ import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
 import Users from "./components/Users";
 import User from "./components/User";
 import { setUsers } from './reducers/usersReducer'
+import Blogs from "./components/Blogs";
 
 const App = () => {
   const dispatch = useDispatch()
@@ -60,8 +61,9 @@ const App = () => {
   return (
     <BrowserRouter>
       <div>
-        <h2>blogs</h2>
+        <h2>blog app</h2>
         <Link to='/users'>Users</Link>
+        <Link to='/blogs'>Blogs</Link>
         {notification.text !== '' && <p className={notification.type}>{notification.text}</p>}
         <p>{user.name} logged in</p>
         <button onClick={handleLogout}>logout</button>
@@ -70,6 +72,7 @@ const App = () => {
         <Route path="/users" element={<Users users={users} />} />
         <Route path="/users/:id" element={<User users={users} />} />
         <Route path="/blogs/:id" element={<Blog blogs={blogs} />} />
+        <Route path="/blogs" element={<Blogs blogs={blogs} />} />
       </Routes>
       <div>
         <Togglable buttonLabel="add new" ref={blogFormRef}>
@@ -80,15 +83,7 @@ const App = () => {
           />
         </Togglable>
       </div>
-      <div>
-        {blogs.map((blog) => {
-          return (
-            <div key={blog.id} className="blog">
-              <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
-            </div>
-          )
-        })}
-      </div>
+      
     </BrowserRouter>
   );
 };
