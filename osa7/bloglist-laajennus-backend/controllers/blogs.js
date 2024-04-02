@@ -69,7 +69,7 @@ blogsRouter.delete('/:id', async (request, response) => {
 
 blogsRouter.post('/:id/comments', async (request, response) => {
   try {
-    if (request.body === '') {
+    if (request.body.comments === '') {
       response.status(500).json({ error: 'please add text to comment' })
     }
     else {

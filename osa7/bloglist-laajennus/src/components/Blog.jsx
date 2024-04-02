@@ -1,13 +1,30 @@
 import blogService from "../services/blogs";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteBlog, likeBlog } from "../reducers/BlogReducer";
+import { commentBlog, deleteBlog, likeBlog } from "../reducers/BlogReducer";
 import { useParams } from "react-router-dom";
+import { useState } from "react";
 
 const Blog = ({ blogs }) => {
+  const [comment, setComment] = useState('')
   const { id } = useParams()
   const dispatch = useDispatch()
   const blog = blogs.find((blog) => blog.id === id)
   const user = useSelector(state => state.user)
+
+  const handleCommentChange = (event) => {
+    setComment(event.target.value)
+  }
+
+  const handlePostComment = async () => {
+    try {
+      await blogService.comment(blog.id, comment)
+      setComment('')
+      const commentData = {id: blog.id, commentText: comment}
+      dispatch(commentBlog(commentData))
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   const handleBlogUpdate = async () => {
     await blogService.update(blog);
@@ -34,6 +51,8 @@ const Blog = ({ blogs }) => {
       <p>added by {blog.user.name}</p>
       {user.name === blog.user.name && <button onClick={handleBlogDelete}>delete blog</button>}
       <h3>comments</h3>
+      <input type="text" onChange={handleCommentChange} value={comment} />
+      <button onClick={handlePostComment}>add comment</button>
       <ul>
         {blog.comments.map((comment, i) => {
           return <li key={i}>{comment}</li>

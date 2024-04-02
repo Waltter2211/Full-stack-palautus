@@ -43,4 +43,11 @@ const remove = async (removedBlog) => {
   return response.data;
 };
 
-export default { getAll, create, update, remove, setToken };
+const comment = async (id, commentData) => {
+  console.log(typeof(commentData))
+  const comment = { comments: commentData }
+  const response = await axios.post(`http://localhost:3003/api/blogs/${id}/comments`, comment)
+  return response.data
+}
+
+export default { getAll, create, update, remove, setToken, comment };

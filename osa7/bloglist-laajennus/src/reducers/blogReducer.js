@@ -19,9 +19,13 @@ export const blogSlice = createSlice({
         deleteBlog:(state, action) => {
             const foundBlogId = state.findIndex(blog => blog.id === action.payload)
             state.splice(foundBlogId, 1)
+        },
+        commentBlog:(state, action) => {
+            const foundBlog = state.find(blog => blog.id === action.payload.id)
+            foundBlog.comments.push(action.payload.commentText)
         }
     }
 })
 
-export const { setBlogs, addBlog, likeBlog, deleteBlog } = blogSlice.actions
+export const { setBlogs, addBlog, likeBlog, deleteBlog, commentBlog } = blogSlice.actions
 export default blogSlice.reducer
