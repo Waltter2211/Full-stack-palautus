@@ -20,7 +20,6 @@ const App = () => {
   const user = useSelector(state => state.user)
   const users = useSelector(state => state.users)
   const blogs = useSelector(state => state.blogs)
-  /* const [user, setUser] = useState(null); */
   const blogFormRef = useRef();
 
   useEffect(() => {
@@ -70,6 +69,7 @@ const App = () => {
       <Routes>
         <Route path="/users" element={<Users users={users} />} />
         <Route path="/users/:id" element={<User users={users} />} />
+        <Route path="/blogs/:id" element={<Blog blogs={blogs} />} />
       </Routes>
       <div>
         <Togglable buttonLabel="add new" ref={blogFormRef}>
@@ -81,9 +81,13 @@ const App = () => {
         </Togglable>
       </div>
       <div>
-        {blogs.map((blog) => (
-          <Blog key={blog.id} blog={blog} user={user} />
-        ))}
+        {blogs.map((blog) => {
+          return (
+            <div key={blog.id} className="blog">
+              <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+            </div>
+          )
+        })}
       </div>
     </BrowserRouter>
   );

@@ -1,19 +1,13 @@
-import { useState } from "react";
 import blogService from "../services/blogs";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { deleteBlog, likeBlog } from "../reducers/BlogReducer";
+import { useParams } from "react-router-dom";
 
-const Blog = ({ blog, user }) => {
-  /* const [like, setLike] = useState(blog.likes) */
+const Blog = ({ blogs }) => {
+  const { id } = useParams()
   const dispatch = useDispatch()
-  const [visible, setVisible] = useState(false);
-  const style = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: "solid",
-    borderWidth: 1,
-    marginBottom: 5,
-  };
+  const blog = blogs.find((blog) => blog.id === id)
+  const user = useSelector(state => state.user)
 
   const handleBlogUpdate = async () => {
     await blogService.update(blog);
@@ -27,35 +21,18 @@ const Blog = ({ blog, user }) => {
     }
   };
 
+  if (!blog) {
+    return null
+  }
+
   return (
     <div data-testid="testBlog">
-      {visible ? (
-        <div style={style}>
-          <p className="blog">
-            {blog.title}
-            <button onClick={() => setVisible(!visible)}>hide</button>
-          </p>
-          <p data-testid="url">{blog.url}</p>
-          <p data-testid="likes">likes {blog.likes}</p>
-          <button
-            onClick={() => {
-              handleBlogUpdate();
-              /* setLike(like + 1) */
-            }}
-          >
-            like
-          </button>
-          <p>{blog.author}</p>
-          {user.name === blog.user.name && (
-            <button onClick={handleBlogDelete}>remove</button>
-          )}
-        </div>
-      ) : (
-        <div style={style}>
-          {blog.title}
-          <button onClick={() => setVisible(!visible)}>view</button>
-        </div>
-      )}
+      <h2>{blog.title}</h2>
+      <a href={blog.url}>{blog.url}</a>
+      <p>{blog.likes}</p>
+      <button onClick={handleBlogUpdate}>like</button>
+      <p>added by {blog.user.name}</p>
+      {user.name === blog.user.name && <button onClick={handleBlogDelete}>delete blog</button>}
     </div>
   );
 };
