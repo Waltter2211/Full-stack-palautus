@@ -4,7 +4,7 @@ import { EDIT_AUTHOR } from '../queries/queries'
 import { useMutation } from '@apollo/client'
 import { useEffect } from 'react'
 
-function EditBook() {
+function EditBook({ authors }) {
     const [name, setName] = useState('')
     const [setBornTo, setSetBornTo] = useState('')
     const [ changeAuthor, result ] = useMutation(EDIT_AUTHOR)
@@ -16,20 +16,13 @@ function EditBook() {
         setSetBornTo('')
     }
 
-    /* useEffect(() => {
-        if (result.data && result.data.updateAuthor === null) {
-          setError('person not found')
-        }
-      }, [result.data]) */
-
   return (
     <div>
         <form onSubmit={handleUpdate}>
         <div>
-          name <input
-            value={name}
-            onChange={({ target }) => setName(target.value)}
-          />
+          <select value={name} onChange={({ target }) => setName(target.value)}>
+            {authors.map((a, i) => <option key={i} value={a.name}>{a.name}</option>)}
+          </select>
         </div>
         <div>
           born <input
