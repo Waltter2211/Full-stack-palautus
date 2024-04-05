@@ -7,4 +7,15 @@ query AllAuthors {
       born
       bookCount
     }
-}`
+  }
+`
+
+export const ALL_BOOKS = gql`
+query AllBooks {
+    allBooks {
+      author
+      published
+      title
+    }
+  }
+`
