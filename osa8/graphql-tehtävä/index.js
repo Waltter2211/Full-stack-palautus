@@ -1,5 +1,6 @@
 const { ApolloServer } = require('@apollo/server')
 const { startStandaloneServer } = require('@apollo/server/standalone')
+const { v1: uuid } = require('uuid')
 
 let authors = [
   {
@@ -119,6 +120,15 @@ const typeDefs = `
         allBooks(author: String, genres: String): [Book!]!
         allAuthors: [Author!]!
     }
+
+    type Mutation {
+        addBook(
+            title: String!
+            published: Int!
+            author: String!
+            genres: [String!]
+        ): Book
+    }
 `
 
 const resolvers = {
@@ -136,13 +146,36 @@ const resolvers = {
             return books
         }
     },
-    allAuthors: () => authors.map(({name}) => {
+    allAuthors: () => authors.map(({name, born}) => {
         const bookCount = books.filter((b) => b.author === name).length
         return {
             name,
+            born,
             bookCount
         }
     })
+  },
+  Mutation: {
+    addBook: (root, args) => {
+        if (books.find(b => b.title === args.title)) {
+            throw new GraphQLError('Title must be unique', {
+                extensions: {
+                  code: 'BAD_USER_INPUT',
+                  invalidArgs: args.title
+                }
+            })
+        }
+        const book = { ...args, id: uuid() }
+        books = books.concat(book)
+        if (authors.find(a => a.author !== args.author)) {
+            const person = { id: uuid(), name: args.author, born: null, bookCount: 1 }
+            authors.push(person)
+            return book
+        }
+        else {
+            return book
+        }
+    }
   }
 }
 
