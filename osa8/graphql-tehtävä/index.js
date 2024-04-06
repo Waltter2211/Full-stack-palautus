@@ -207,9 +207,10 @@ const resolvers = {
       const book = new Book({ title: args.title, published: args.published, author: args.author, genres: [...args.genres] })
       return book.save()
         .catch(err => {
-          throw new GraphQLError('Creating new book failer', {
+          throw new GraphQLError('Creating new book failed', {
             extensions: {
               code: 'BAD_USER_INPUT',
+              invalidArgs: args.title,
               err
             }
           })
@@ -218,6 +219,15 @@ const resolvers = {
     addAuthor: (root, args) => {
       const author = new Author({ ...args })
       return author.save()
+      .catch(err => {
+        throw new GraphQLError('Creating new author failed', {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+            invalidArgs: args.name,
+            err
+          }
+        })
+      })
     },
     editAuthor: (root, args) => {
         const person = authors.find(a => a.name === args.name)
