@@ -229,16 +229,19 @@ const resolvers = {
         })
       })
     },
-    editAuthor: (root, args) => {
-        const person = authors.find(a => a.name === args.name)
-        if (!person) {
-            return null
-        }
-        else {
-            const updatedPerson = { ...person, born: args.setBornTo }
-            const newAuthorsArr = authors.map(a => a.name === args.name ? updatedPerson : a)
-            authors = newAuthorsArr
-            return updatedPerson
+    editAuthor: async (root, args) => {
+        let person = await Author.findOne({ name: args.name })
+        try {
+          person.born = args.setBornTo
+          person.save()
+        } catch (error) {
+          throw new GraphQLError('Editing author failed', {
+            extensions: {
+              code: 'BAD_USER_INPUT',
+              invalidArgs: args.setBornTo,
+              err
+            }
+          })
         }
     }
   }
