@@ -51,7 +51,7 @@ const NewBook = (props) => {
         <div>
           author
           <input
-            value={author}
+            value={author.name}
             onChange={({ target }) => setAuthor(target.value)}
           />
         </div>
