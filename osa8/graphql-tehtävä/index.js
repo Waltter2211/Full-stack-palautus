@@ -1,6 +1,14 @@
 const { ApolloServer } = require('@apollo/server')
 const { startStandaloneServer } = require('@apollo/server/standalone')
 const { v1: uuid } = require('uuid')
+const { GraphQLError } = require('graphql')
+const mongoose = require('mongoose')
+mongoose.set('strictQuery', false)
+require('dotenv').config()
+
+const Author = require('./models/author')
+const Book = require('./models/book')
+const author = require('./models/author')
 
 let authors = [
   {
@@ -98,6 +106,14 @@ let books = [
   you can remove the placeholder query once your first one has been implemented 
 */
 
+const mongoUrl = process.env.MONGODB_URI
+
+console.log(mongoUrl)
+
+mongoose.connect(mongoUrl)
+  .then(() => console.log('connected to mongodb'))
+  .catch((err) => console.log(err.message))
+
 const typeDefs = `
     type Author {
         name: String!
@@ -109,7 +125,7 @@ const typeDefs = `
     type Book {
         title: String!
         published: Int!
-        author: String!
+        author: Author!
         id: ID!
         genres: [String!]
     }
@@ -128,6 +144,10 @@ const typeDefs = `
             author: String!
             genres: [String!]
         ): Book
+        addAuthor(
+          name: String!
+          born: Int
+        ): Author
         editAuthor(
             name: String!
             setBornTo: Int
@@ -160,8 +180,8 @@ const resolvers = {
     })
   },
   Mutation: {
-    addBook: (root, args) => {
-        if (books.find(b => b.title === args.title)) {
+    addBook: async (root, args) => {
+        /* if (books.find(b => b.title === args.title)) {
             throw new GraphQLError('Title must be unique', {
                 extensions: {
                   code: 'BAD_USER_INPUT',
@@ -179,7 +199,21 @@ const resolvers = {
         }
         else {
             return book
-        }
+        } */
+      const book = new Book({ title: args.title, published: args.published, author: args.author, genres: [...args.genres] })
+      return book.save()
+        .catch(err => {
+          throw new GraphQLError('Creating new book failer', {
+            extensions: {
+              code: 'BAD_USER_INPUT',
+              err
+            }
+          })
+        })
+    },
+    addAuthor: (root, args) => {
+      const author = new Author({ ...args })
+      return author.save()
     },
     editAuthor: (root, args) => {
         const person = authors.find(a => a.name === args.name)
