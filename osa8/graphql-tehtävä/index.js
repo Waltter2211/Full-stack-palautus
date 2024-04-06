@@ -8,7 +8,6 @@ require('dotenv').config()
 
 const Author = require('./models/author')
 const Book = require('./models/book')
-const author = require('./models/author')
 
 let authors = [
   {
@@ -144,10 +143,12 @@ const typeDefs = `
             author: String!
             genres: [String!]
         ): Book
+
         addAuthor(
           name: String!
           born: Int
         ): Author
+        
         editAuthor(
             name: String!
             setBornTo: Int
@@ -157,27 +158,30 @@ const typeDefs = `
 
 const resolvers = {
   Query: {
-    bookCount: () => books.length,
-    authorCount: () => authors.length,
-    allBooks: (root, args) => {
+    bookCount: () => Book.collection.countDocuments(),
+    authorCount: () => Author.collection.countDocuments(),
+    allBooks: async (root, args) => {
         if (args.author) {
-            return books.filter(book => book.author === args.author)
+            return await Book.find({ author: args.author }).populate('author')
         }
         else if (args.genres) {
-            return books.filter(book => book.genres.includes(args.genres))
+            return await Book.find({ genres: args.genres }).populate('author')
         }
         else {
-            return books
+            return await Book.find({}).populate('author')
         }
     },
-    allAuthors: () => authors.map(({name, born}) => {
+    /* allAuthors: () => authors.map(({name, born}) => {
         const bookCount = books.filter((b) => b.author === name).length
         return {
             name,
             born,
             bookCount
         }
-    })
+    }) */
+    allAuthors: async (root, args) => {
+      return await Author.find({})
+    }
   },
   Mutation: {
     addBook: async (root, args) => {
