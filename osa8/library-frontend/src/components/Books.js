@@ -1,8 +1,12 @@
 import { useState } from "react"
-import { ALL_BOOKS, FIND_BY_GENRE } from "../queries/queries"
+import { ALL_BOOKS, ALL_BOOKS_BY_GENRE, FIND_BY_GENRE } from "../queries/queries"
 import { useQuery } from '@apollo/client'
 
 const BookByGenre = ({ books, booksByGenre, onClose }) => {
+
+  if (!books) {
+    return <div>loading data</div>
+  }
 
   const filteredBooks = books.filter((book) => book.genres.includes(booksByGenre))
 
@@ -32,26 +36,29 @@ const BookByGenre = ({ books, booksByGenre, onClose }) => {
 
 const Books = (props) => {
   const [booksByGenre, setBooksByGenre] = useState(null)
+  const result = useQuery(ALL_BOOKS_BY_GENRE, {
+    variables: { booksByGenre },
+    skip: !booksByGenre
+  })
+
   if (!props.show) {
     return null
   }
-
+  
   const books = [...props.books]
-
-  if (booksByGenre && books) {
-    
-    return (
-      <BookByGenre books={books} booksByGenre={booksByGenre} onClose={() => setBooksByGenre(null)} />
-    )
-  }
 
   const foundGenres = books.map(({genres}) => {
     return genres
   })
-
   const flattedArr = foundGenres.flat()
-
   const removed = flattedArr.filter((value, index) => flattedArr.indexOf(value) === index)
+
+  if (booksByGenre && result) {
+    
+    return (
+      <BookByGenre books={result.data?.allBooks} booksByGenre={booksByGenre} onClose={() => setBooksByGenre(null)} />
+    )
+  }
 
   return (
     <div>
