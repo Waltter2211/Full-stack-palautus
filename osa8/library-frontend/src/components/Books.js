@@ -38,11 +38,16 @@ const Books = (props) => {
   const [booksByGenre, setBooksByGenre] = useState(null)
   const result = useQuery(ALL_BOOKS_BY_GENRE, {
     variables: { booksByGenre },
-    skip: !booksByGenre
+    skip: !booksByGenre,
+    pollInterval: 6000
   })
 
   if (!props.show) {
     return null
+  }
+
+  if (result.loading) {
+    return <div>loading</div>
   }
   
   const books = [...props.books]
@@ -56,7 +61,7 @@ const Books = (props) => {
   if (booksByGenre && result) {
     
     return (
-      <BookByGenre books={result.data?.allBooks} booksByGenre={booksByGenre} onClose={() => setBooksByGenre(null)} />
+      <BookByGenre books={result.data.allBooks} booksByGenre={booksByGenre} onClose={() => setBooksByGenre(null)} />
     )
   }
 
