@@ -89,3 +89,13 @@ export const LOGIN = gql`
     }
   }
 `
+
+export const BOOK_ADDED = gql`
+  subscription AddBook {
+    addBook {
+      title
+      published
+      genres
+    }
+  }
+`

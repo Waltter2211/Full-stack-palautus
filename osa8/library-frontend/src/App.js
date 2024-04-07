@@ -2,11 +2,12 @@ import { useState } from 'react'
 import Authors from './components/Authors'
 import Books from './components/Books'
 import NewBook from './components/NewBook'
-import { useApolloClient, useQuery } from '@apollo/client'
+import { useApolloClient, useQuery, useSubscription } from '@apollo/client'
 import { ALL_AUTHORS, ALL_BOOKS } from './queries/queries'
 import EditBook from './components/EditBook'
 import Login from './components/Login'
 import Recommendations from './components/Recommendations'
+import { BOOK_ADDED } from './queries/queries'
 
 const App = () => {
   const [token, setToken] = useState(null)
@@ -18,6 +19,12 @@ const App = () => {
     pollInterval: 6000
   })
   const client = useApolloClient()
+  useSubscription(BOOK_ADDED, {
+    onData: ({ data }) => {
+      const addedBook = data.data.addBook
+      window.alert(`${addedBook.title} added`)
+    }
+  })
 
   if (authors.loading || books.loading)  {
     return <div>loading...</div>
