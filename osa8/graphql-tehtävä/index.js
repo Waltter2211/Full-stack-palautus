@@ -194,14 +194,6 @@ const resolvers = {
             return await Book.find({}).populate('author')
         }
     },
-    /* allAuthors: () => authors.map(({name, born}) => {
-        const bookCount = books.filter((b) => b.author === name).length
-        return {
-            name,
-            born,
-            bookCount
-        }
-    }) */
     allAuthors: async (root, args) => {
       return await Author.find({})
     },
