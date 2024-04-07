@@ -24,6 +24,15 @@ query AllBooks {
   }
 `
 
+export const ME = gql`
+  query Query {
+    me {
+      username
+      favoriteGenre
+    }
+  }
+`
+
 export const ADD_BOOK = gql`
 mutation Mutation(
     $title: String!, 

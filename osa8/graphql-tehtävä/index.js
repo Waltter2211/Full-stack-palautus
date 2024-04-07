@@ -203,25 +203,6 @@ const resolvers = {
   },
   Mutation: {
     addBook: async (root, args, { currentUser }) => {
-        /* if (books.find(b => b.title === args.title)) {
-            throw new GraphQLError('Title must be unique', {
-                extensions: {
-                  code: 'BAD_USER_INPUT',
-                  invalidArgs: args.title
-                }
-            })
-        }
-        const book = { ...args, id: uuid() }
-        books = books.concat(book)
-        const namesArr = authors.map((a) => a.name)
-        if (!namesArr.includes(args.author)) {
-            const person = { id: uuid(), name: args.author, born: null, bookCount: 1 }
-            authors = authors.concat(person)
-            return book
-        }
-        else {
-            return book
-        } */
       if (!currentUser) {
         throw new GraphQLError('wrong credentials', {
           extensions: { code: 'BAD_USER_INPUT' }
