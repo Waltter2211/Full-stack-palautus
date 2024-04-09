@@ -10,7 +10,7 @@ interface Result {
     ratingDescription: string
 }
 
-const calculateExercises = (args: number[], target: number): Result => {
+export const calculateExercises = (args: number[], target: number): Result => {
 
     const hitSuccess: number = args.reduce((acc: number, curr: number): number => acc + curr, 0);
 
