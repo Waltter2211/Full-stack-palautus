@@ -1,4 +1,4 @@
-import { parseArgumentsExercises } from "./utils"
+import { parseArgumentsExercises } from "./utils";
 
 interface Result {
     periodLength: number, 
@@ -22,16 +22,16 @@ const calculateExercises = (args: number[], target: number): Result => {
         success: (hitSuccess / args.length) > target? true : false,
         rating: hitSuccess > 0 && hitSuccess < 10? 1: hitSuccess > 10 && hitSuccess < 15? 2: hitSuccess > 15? 3: 0,
         ratingDescription: hitSuccess > 0 && hitSuccess < 10? 'could improve a lot': hitSuccess > 10 && hitSuccess < 15? 'not too bad but could be better': hitSuccess > 15? 'very good': 'very very bad'
-    }
-}
+    };
+};
 
 try {
     const { argsArr, targetValue } = parseArgumentsExercises(process.argv);
-    console.log(calculateExercises(argsArr, targetValue))
+    console.log(calculateExercises(argsArr, targetValue));
 } catch (error) {
-    let errorMessage = 'Something bad happened'
+    let errorMessage = 'Something bad happened';
     if (error instanceof Error) {
-        errorMessage += ' Error: ' + error.message
+        errorMessage += ' Error: ' + error.message;
     }
-    console.log(errorMessage)
+    console.log(errorMessage);
 }

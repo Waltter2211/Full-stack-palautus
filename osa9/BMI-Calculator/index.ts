@@ -22,7 +22,7 @@ app.get(`/bmi?:height?:weight`, (req, res) => {
     else {
         res.send({error: 'malformatted parameters'});
     }    
-})
+});
 
 app.listen(PORT, () => {
     console.log(`connected to ${PORT}`);

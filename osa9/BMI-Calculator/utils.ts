@@ -16,12 +16,12 @@ export const parseArgumentsHeightWeight = (args: string[]): HeightAndWeight => {
         return {
             height: Number(args[2]),
             weight: Number(args[3])
-        }
+        };
     }
     else {
         throw new Error('Arguments must be numbers');
     }  
-}
+};
 
 export const parseArgumentsExercises = (args: string[]): ExerciseDetails => {
     if (process.argv.length > 10) throw new Error('Too many arguments');
@@ -31,9 +31,9 @@ export const parseArgumentsExercises = (args: string[]): ExerciseDetails => {
         return {
             argsArr: [Number(args[3]), Number(args[4]), Number(args[5]), Number(args[6]), Number(args[7]), Number(args[8]), Number(args[9])],
             targetValue: Number(args[2])
-        }
+        };
     }
     else {
         throw new Error('Arguments must be numbers');
     } 
-}
+};
