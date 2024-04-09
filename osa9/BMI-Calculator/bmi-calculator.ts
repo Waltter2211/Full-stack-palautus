@@ -1,21 +1,24 @@
 import { parseArgumentsHeightWeight } from './utils'
 
-const calculateBmi = (height: number, weight: number) => {
+export const calculateBmi = (height: number, weight: number): string => {
     const bmi: number = weight / (height * height)*10000;
     if (bmi < 18.5) {
-        console.log('Underweight')
+        return 'Underweight'
     }
     else if (bmi >= 18.5 && bmi <= 25) {
-        console.log('Normal (healthy weight)')
+        return 'Normal (healthy weight)'
     }
     else if (bmi > 25) {
-        console.log('Overweight')
+        return 'Overweight'
+    }
+    else {
+        return 'Please provide real value'
     }
 }
 
 try {
     const { height, weight } = parseArgumentsHeightWeight(process.argv);
-    calculateBmi(height, weight)
+    console.log(calculateBmi(height, weight))
 } catch (error) {
     let errorMessage = 'Something bad happened'
     if (error instanceof Error) {
