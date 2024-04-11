@@ -8,4 +8,14 @@ patientsRouter.get('/', (_req, res) => {
     res.send(patientArr);
 });
 
+patientsRouter.post('/', (req, res) => {
+    try {
+        const newPatient = patientsService.addPatient(req.body);
+        const addedPatient = newPatient
+        res.json(addedPatient);
+    } catch (error) {
+        console.log(error)
+    }
+});
+
 export default patientsRouter;
