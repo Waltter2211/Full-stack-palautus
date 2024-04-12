@@ -1,18 +1,39 @@
-interface ContentPropsDetails {
-    name: string,
-    exerciseCount: number
-}
+import Part from "./Part";
+import CoursePart from '../../types';
+
+/* interface ContentPropsDetails {
+  name: string,
+  exerciseCount: number
+} */
 
 type ContentProps = {
-    courseParts: ContentPropsDetails[]
+  courseParts: CoursePart[]
 }
 
-function Content({courseParts}: ContentProps) {
+function Content({ courseParts }: ContentProps) {
+
+  const assertNever = (value: never): never => {
+    throw new Error(
+      `Unhandled discriminated union member: ${JSON.stringify(value)}`
+    );
+  };
+
   return (
     <div>
-      <p>{courseParts[0].name}: {courseParts[0].exerciseCount}</p>
-      <p>{courseParts[1].name}: {courseParts[1].exerciseCount}</p>
-      <p>{courseParts[2].name}: {courseParts[2].exerciseCount}</p>
+      {courseParts.map((coursePart: CoursePart, index: number) => {
+        switch (coursePart.kind) {
+        case 'basic':
+          return <Part key={index} name={coursePart.name} description={coursePart.description} exerciseCount={coursePart.exerciseCount} />
+        case 'group':
+          return <Part key={index} name={coursePart.name} description={coursePart.description} exerciseCount={coursePart.exerciseCount} groupProjectCount={coursePart.groupProjectCount} />
+        case 'background':
+          return <Part key={index} name={coursePart.name} description={coursePart.description} exerciseCount={coursePart.exerciseCount} backgroundMaterial={coursePart.backgroundMaterial} />
+        case 'special':
+          return <Part key={index} name={coursePart.name} description={coursePart.description} exerciseCount={coursePart.exerciseCount} requirements={coursePart.requirements} />
+        default:
+          return assertNever(coursePart);
+        }
+      })}
     </div>
   )
 }
