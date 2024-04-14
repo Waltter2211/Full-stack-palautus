@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import patientService from '../../services/patients';
-import { Diagnose, Patient } from '../../types';
+import { Diagnose, Entry, Patient } from '../../types';
 import getDiagnoses from '../../services/diagnoses';
+import HospitalEntry from '../EntryComponents/HospitalEntry';
+import OccupationalHealthCareEntry from '../EntryComponents/OccupationalHealthCareEntry';
+import HealthCheckEntry from '../EntryComponents/HealthCheckEntry';
 
 type Params = {
     id: string;
@@ -29,6 +32,24 @@ const PatientInfoPage = () => {
 
         void fetchDiagnoses();
     }, []);
+
+    const EntryDetails: React.FC<Entry> = (entry) => {
+        switch (entry.type) {
+            case "Hospital":
+                return <HospitalEntry type={entry.type} discharge={entry.discharge} date={entry.date} description={entry.description} specialist={entry.specialist} />;
+            case "OccupationalHealthcare":
+                return <OccupationalHealthCareEntry type={entry.type} employerName={entry.employerName} sickLeave={entry.sickLeave} specialist={entry.specialist} date={entry.date} description={entry.description} />;
+            case "HealthCheck":
+                return <HealthCheckEntry type={entry.type} specialist={entry.specialist} healthCheckRating={entry.healthCheckRating} date={entry.date} description={entry.description} />;
+            default:
+                return assertNever(entry);
+        }
+    };
+
+    function assertNever(shouldBeNever: never) {
+        throw new Error("Was not never: " + shouldBeNever);
+    }
+
   return (
     <div>
         {patient.map(details => {
@@ -41,18 +62,11 @@ const PatientInfoPage = () => {
                     {details.entries.map(entry => {
                         return (
                         <div key={entry.id}>
-                            <p>{entry.date} {entry.description}</p>
-                            <ul>
-                            {entry.diagnosisCodes?.map((code, index) => {
-                                const foundDiagnose = diagnoses.filter(diagnose => diagnose.code === code);
-                                return (
-                                    <li key={index}>{code} {foundDiagnose[0].name}</li>
-                                );
-                            })}
-                            </ul>
+                            <EntryDetails type={entry.type} id={entry.id} description={entry.description} specialist={entry.specialist} date={entry.date} healthCheckRating={entry.healthCheckRating} sickLeave={entry.sickLeave} discharge={entry.discharge} employerName={entry.employerName}  />
                         </div>
                         );
                     })}
+                    
                 </div>
             );
         })}
