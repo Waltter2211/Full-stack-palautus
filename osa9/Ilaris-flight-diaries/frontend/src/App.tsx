@@ -54,11 +54,31 @@ function App() {
       <p style={{ color: 'red' }}>{message.text}</p>
       <form onSubmit={handleDiary}>
         <p>date</p>
-        <input type='text' value={date} onChange={(event) => setDate(event.target.value)} />
-        <p>weather</p>
-        <input type='text' value={weather} onChange={(event) => setWeather(event.target.value)} />
-        <p>visibility</p>
-        <input type='text' value={visibility} onChange={(event) => setVisibility(event.target.value)} />
+        <input type='date' value={date} onChange={(event) => setDate(event.target.value)} />
+        <div>
+          <p>weather</p>
+          <label>sunny</label>
+          <input type='radio' value='sunny' name='weather' onChange={(event) => setWeather(event.target.value)} />
+          <label>rainy</label>
+          <input type='radio' value='rainy' name='weather' onChange={(event) => setWeather(event.target.value)} />
+          <label>cloudy</label>
+          <input type='radio' value='cloudy' name='weather' onChange={(event) => setWeather(event.target.value)} />
+          <label>stormy</label>
+          <input type='radio' value='stormy' name='weather' onChange={(event) => setWeather(event.target.value)} />
+          <label>windy</label>
+          <input type='radio' value='windy' name='weather' onChange={(event) => setWeather(event.target.value)} />
+        </div>
+        <div>
+          <p>visibility</p>
+          <label>great</label>
+          <input type='radio' value='great' name='visibility' onChange={(event) => setVisibility(event.target.value)} />
+          <label>good</label>
+          <input type='radio' value='good' name='visibility' onChange={(event) => setVisibility(event.target.value)} />
+          <label>ok</label>
+          <input type='radio' value='ok' name='visibility' onChange={(event) => setVisibility(event.target.value)} />
+          <label>great</label>
+          <input type='radio' value='poor' name='visibility' onChange={(event) => setVisibility(event.target.value)} />
+        </div>
         <p>comment</p>
         <input type='text' value={comment} onChange={(event) => setComment(event.target.value)} />
         <button>create</button>
