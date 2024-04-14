@@ -10,6 +10,9 @@ function App() {
   const [weather, setWeather] = useState('')
   const [visibility, setVisibility] = useState('')
   const [comment, setComment] = useState('')
+  const [message, setMessage] = useState({
+    text: ''
+  })
 
 
   useEffect(() => {
@@ -18,7 +21,7 @@ function App() {
     })
   }, [])
 
-  const handleDiary = (event: React.SyntheticEvent) => {
+  const handleDiary = async (event: React.SyntheticEvent) => {
     event.preventDefault()
 
     const newDiaryObj = {
@@ -29,8 +32,15 @@ function App() {
       comment: comment
     }
 
-    addNewDiary(newDiaryObj).then(res => {
-      setDiaries(diaries.concat(res.data))
+    addNewDiary(newDiaryObj)
+    .then(res => {
+      setDiaries(diaries.concat(res!.data))
+    })
+    .catch(err => {
+      setMessage({ text: err.message })
+      setTimeout(() => {
+        setMessage({ text: '' })
+      }, 5000)
     })
     setDate('')
     setWeather('')
@@ -41,15 +51,16 @@ function App() {
   return (
     <div>
       <h2>Add new entry</h2>
+      <p style={{ color: 'red' }}>{message.text}</p>
       <form onSubmit={handleDiary}>
         <p>date</p>
-        <input type='text' onChange={(event) => setDate(event.target.value)} />
+        <input type='text' value={date} onChange={(event) => setDate(event.target.value)} />
         <p>weather</p>
-        <input type='text' onChange={(event) => setWeather(event.target.value)} />
+        <input type='text' value={weather} onChange={(event) => setWeather(event.target.value)} />
         <p>visibility</p>
-        <input type='text' onChange={(event) => setVisibility(event.target.value)} />
+        <input type='text' value={visibility} onChange={(event) => setVisibility(event.target.value)} />
         <p>comment</p>
-        <input type='text' onChange={(event) => setComment(event.target.value)} />
+        <input type='text' value={comment} onChange={(event) => setComment(event.target.value)} />
         <button>create</button>
       </form>
       <h2>Diary entries</h2>

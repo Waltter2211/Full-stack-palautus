@@ -8,5 +8,13 @@ export const fetchDiaries = async () => {
 }
 
 export const addNewDiary = async (diaryObj: NewDiary) => {
-    return await axios.post<Diary[]>(`${baseUrl}/diaries`, diaryObj)
+    try {
+        return await axios.post<Diary[]>(`${baseUrl}/diaries`, diaryObj)
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            throw new Error(error.response!.data.split('.')[1])
+        } else {
+            console.error(error);
+        }
+    }
 }
