@@ -1,6 +1,8 @@
 import express from 'express';
 import patientsService from '../services/patientsService';
 import validateNewPatient from '../../utils';
+import { Diagnose } from '../../types';
+import patients from '../../data/patients';
 
 const patientsRouter = express.Router();
 
@@ -33,6 +35,41 @@ patientsRouter.post('/', (req, res) => {
             errorMessage += ' Error: ' + error.message;
         }
         res.status(400).send(errorMessage);
+    }
+});
+
+patientsRouter.post('/:id/entries', (req, res) => {
+    const foundUser = patients.find(patient => patient.id === req.params.id);
+
+    const parseDiagnosisCodes = (object: unknown): Array<Diagnose['code']> =>  {
+        if (!object || typeof object !== 'object' || !('diagnosisCodes' in object)) {
+          // we will just trust the data to be in correct form
+          return [] as Array<Diagnose['code']>;
+        }
+      
+        return object.diagnosisCodes as Array<Diagnose['code']>;
+    };
+
+    try {
+        const parsedDiagnoses = parseDiagnosisCodes(req.body.diagnosisCodes);
+        const entryObj = {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+            description: req.body.description,
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+            date: req.body.date,
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+            specialist: req.body.specialist,
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+            healthCheckRating: req.body.healthCheckRating,
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+            type: req.body.type,
+            diagnosisCodes: parsedDiagnoses,
+        };
+        const addedEntry = patientsService.addEntry(entryObj);
+        foundUser?.entries.push(addedEntry);
+        res.send(addedEntry);
+    } catch (error) {
+        console.log(error);
     }
 });
 
