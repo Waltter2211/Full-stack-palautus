@@ -9,6 +9,19 @@ patientsRouter.get('/', (_req, res) => {
     res.send(patientArr);
 });
 
+patientsRouter.get('/:id', (req, res) => {
+    try {
+        const patientDetails = patientsService.getSinglePatient(req.params.id);
+        if (typeof patientDetails !== 'undefined') {
+            res.send(patientDetails);
+        } else {
+            res.status(500).send({ message: 'id not found' });
+        }
+    } catch (error) {
+        console.log(error);
+    }
+});
+
 patientsRouter.post('/', (req, res) => {
     try {
         const newPatient = validateNewPatient(req.body);

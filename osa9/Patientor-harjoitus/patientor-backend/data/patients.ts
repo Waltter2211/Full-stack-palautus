@@ -48,6 +48,6 @@ const patients: Patient[] = data.map(obj => {
     const object = validateNewPatient(obj) as Patient;
     object.id = obj.id;
     return object;
-})
+});
 
 export default patients;

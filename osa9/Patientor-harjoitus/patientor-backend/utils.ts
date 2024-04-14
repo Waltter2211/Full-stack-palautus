@@ -24,7 +24,7 @@ const parseDate = (date: unknown): string => {
 };
 
 const isGender = (gender: string): gender is Gender => {
-    return Object.values(Gender).map(g => g.toString()).includes(gender)
+    return Object.values(Gender).map(g => g.toString()).includes(gender);
 };
 
 const parseGender = (gender: unknown): Gender => {
@@ -32,7 +32,7 @@ const parseGender = (gender: unknown): Gender => {
         throw new Error('Incorrect gender: ' + gender);
     }
     return gender;
-}
+};
 
 const validateNewPatient = (object: unknown): NewPatient => {
     if (!object || typeof object !== 'object') {
@@ -45,13 +45,14 @@ const validateNewPatient = (object: unknown): NewPatient => {
             dateOfBirth: parseDate(object.dateOfBirth),
             ssn: parseValues(object.ssn),
             gender: parseGender(object.gender),
-            occupation: parseValues(object.occupation)
-        }
+            occupation: parseValues(object.occupation),
+            entries: [],
+        };
 
-        return newPatient
+        return newPatient;
     }
 
     throw new Error('Incorrect data: a field is missing');
 };
 
-export default validateNewPatient
+export default validateNewPatient;
