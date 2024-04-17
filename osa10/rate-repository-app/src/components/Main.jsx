@@ -5,6 +5,9 @@ import AppBar from './AppBar';
 
 const styles = StyleSheet.create({
   container: {
+    padding: 0,
+    margin: 0,
+    width: '100%',
     flexGrow: 1,
     flexShrink: 1,
   },
@@ -14,7 +17,6 @@ const Main = () => {
   return (
     <View style={styles.container}>
       <AppBar />
-      <Text>Rate Repository Application</Text>
       <RepositoryList />
     </View>
   );

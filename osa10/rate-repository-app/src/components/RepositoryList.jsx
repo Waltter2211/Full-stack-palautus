@@ -62,7 +62,7 @@ const RepositoryList = () => {
       data={repositories}
       ItemSeparatorComponent={ItemSeparator}
       // other props
-      renderItem={({item}) => <RepositoryItem fullName={item.fullName} description={item.description} language={item.language} stargazersCount={item.stargazersCount} forksCount={item.forksCount} reviewCount={item.reviewCount} ratingAverage={item.ratingAverage} />}
+      renderItem={({item}) => <RepositoryItem fullName={item.fullName} description={item.description} language={item.language} stargazersCount={item.stargazersCount} forksCount={item.forksCount} reviewCount={item.reviewCount} ratingAverage={item.ratingAverage} ownerAvatarUrl={item.ownerAvatarUrl} />}
       keyExtractor={item => item.id}
     />
   );
