@@ -15,7 +15,7 @@ const RepositoryList = () => {
  const { repositories } = useRepositories();
 
   const repositoryNodes = repositories
-  ? repositories.edges.map(edge => edge.node)
+  ? repositories.edges?.map(edge => edge.node)
   : [];
 
   return (
