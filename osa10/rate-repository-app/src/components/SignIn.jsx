@@ -2,6 +2,7 @@ import { View, TextInput, StyleSheet, Pressable, Text, Platform } from 'react-na
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import useSignIn from '../hooks/useSignIn';
+import AuthStorage from '../utils/authStorage';
 
 const SignIn = () => {
 
@@ -47,7 +48,11 @@ const SignIn = () => {
 
     try {
       const { data } = await signin({ username, password })
-      console.log(data)
+      const authStorage = new AuthStorage('auth')
+      authStorage.setAccessToken(data)
+      authStorage.getAccessToken()
+      authStorage.removeAccessToken()
+      /* console.log(data) */
     } catch (error) {
       console.log(error)
     }
