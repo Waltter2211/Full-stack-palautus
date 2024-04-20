@@ -67,46 +67,37 @@ const numberFormat = (value) => {
 }
 
 const RepositoryItem = ({ ownerAvatarUrl, fullName, description, language, stargazersCount, forksCount, reviewCount, ratingAverage }) => {
-  let { id } = useParams()
-
-  console.log(id)
-  const { data, loading, error } = useQuery(GET_SINGLE_REPOSITORY, 
-    {variables: {repositoryId: id}})
   
   return (
     <View testID="repositoryItem" style={styles.container}>
       <View style={styles.infoContainer}>
         <View style={styles.imageDiv}>
-          <Image style={styles.imageStyle} source={{uri: ownerAvatarUrl || data?.repository.ownerAvatarUrl}}></Image>
+          <Image style={styles.imageStyle} source={{uri: ownerAvatarUrl}}></Image>
         </View>
         <View style={styles.descriptionDiv}>
-          <Text style={styles.fullNameText}>{fullName || data?.repository.fullName}</Text>
-          <Text style={styles.descriptionText}>{description || data?.repository.description}</Text>
-          <Text style={styles.languageText}>{language || data?.repository.language}</Text>
+          <Text style={styles.fullNameText}>{fullName}</Text>
+          <Text style={styles.descriptionText}>{description}</Text>
+          <Text style={styles.languageText}>{language}</Text>
         </View>
       </View>
       <View style={styles.ratingContainer}>
         <View style={styles.ratingDiv}>
-          <Text style={styles.fullNameText}>{numberFormat(stargazersCount) || numberFormat(data?.repository.stargazersCount)}</Text>
+          <Text style={styles.fullNameText}>{numberFormat(stargazersCount)}</Text>
           <Text style={styles.descriptionText}>Stars</Text>
         </View>
         <View style={styles.ratingDiv}>
-          <Text style={styles.fullNameText}>{numberFormat(forksCount) || numberFormat(data?.repository.forksCount)}</Text>
+          <Text style={styles.fullNameText}>{numberFormat(forksCount)}</Text>
           <Text style={styles.descriptionText}>Forks</Text>
         </View>
         <View style={styles.ratingDiv}>
-          <Text style={styles.fullNameText}>{numberFormat(reviewCount) || numberFormat(data?.repository.reviewCount)}</Text>
+          <Text style={styles.fullNameText}>{numberFormat(reviewCount)}</Text>
           <Text style={styles.descriptionText}>Reviews</Text>
         </View>
         <View style={styles.ratingDiv}>
-          <Text style={styles.fullNameText}>{numberFormat(ratingAverage) || numberFormat(data?.repository.ratingAverage)}</Text>
+          <Text style={styles.fullNameText}>{numberFormat(ratingAverage)}</Text>
           <Text style={styles.descriptionText}>Rating</Text>
         </View>
-        
       </View>
-      {id !== undefined
-         ? <View style={{width: '100%', height: '100px', display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: 'blue', borderRadius: '10px'}}><Pressable onPress={() => Linking.openURL(data?.repository.url)}><Text style={{color: 'white', fontSize: '30px', fontWeight: 'bold'}}>Open in GitHub</Text></Pressable></View>
-         : <View></View>}
     </View>
   )
 }

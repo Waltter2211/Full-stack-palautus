@@ -50,7 +50,6 @@ const AppBar = () => {
             {loggedIn === undefined
              ? <Link to='/signin'><Text style={styles.text}>Sign in</Text></Link>
              : <Text style={styles.text} onPress={handleSignOut}>Sign Out</Text>}
-            <Link to='/test'><Text style={styles.text}>Test</Text></Link>
         </ScrollView>
     </View>
   )
