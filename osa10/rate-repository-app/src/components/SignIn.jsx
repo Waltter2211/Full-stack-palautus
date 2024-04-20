@@ -4,6 +4,7 @@ import * as yup from 'yup';
 import useSignIn from '../hooks/useSignIn';
 import AuthStorage from '../utils/authStorage';
 import { useNavigate } from 'react-router-native';
+import useAuthStorage from '../hooks/useAuthStorage';
 
 const SignIn = () => {
 
@@ -44,14 +45,17 @@ const SignIn = () => {
     }
   })
 
+  const authStorage = useAuthStorage()
+
   const [signin] = useSignIn();
 
   const onSubmit = async (values) => {
     const { username, password } = values;
     try {
       const { data } = await signin({ username, password })
-      console.log(data)
+      console.log(data.authenticate)
       navigate('/')
+      window.location.reload()
     } catch (error) {
       console.log(error)
     }
