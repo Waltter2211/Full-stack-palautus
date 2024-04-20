@@ -33,7 +33,10 @@ const ReviewItem = ({ review }) => {
 const SingleRepository = () => {
   let { id } = useParams()
   const repositoryData = useQuery(GET_SINGLE_REPOSITORY, 
-    {variables: {repositoryId: id}})
+    {
+      fetchPolicy: 'cache-and-network',
+      variables: {repositoryId: id}
+    })
 
   const reviewData = useQuery(GET_REVIEWS, 
     {variables: {repositoryId: id}})
