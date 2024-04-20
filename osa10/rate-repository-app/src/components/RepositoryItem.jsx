@@ -65,7 +65,7 @@ const numberFormat = (value) => {
 
 const RepositoryItem = ({ ownerAvatarUrl, fullName, description, language, stargazersCount, forksCount, reviewCount, ratingAverage }) => {
   return (
-    <View style={styles.container}>
+    <View testID="repositoryItem" style={styles.container}>
       <View style={styles.infoContainer}>
         <View style={styles.imageDiv}>
           <Image style={styles.imageStyle} source={{uri: ownerAvatarUrl}}></Image>

@@ -29,13 +29,13 @@ const AppBar = () => {
 
   useEffect(() => {
     authStorage.getAccessToken().then(res => {
-      setLoggedIn(res.data.authenticate.accessToken)
+      setLoggedIn(res.data?.authenticate.accessToken)
     })
   }, [])
 
   const handleSignOut = () => {
     authStorage.removeAccessToken()
-    window.location.reload()
+    /* window.location.reload() */
   }
 
   return (
