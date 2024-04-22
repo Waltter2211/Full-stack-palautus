@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client";
 
-export const GET_REPOSITORIES = gql`
+/* export const GET_REPOSITORIES = gql`
     query Query {
         repositories {
             edges {
@@ -16,6 +16,26 @@ export const GET_REPOSITORIES = gql`
                     ratingAverage
                 }
             }
+        }
+    }
+`; */
+
+export const GET_REPOSITORIES = gql`
+    query Query($orderBy: AllRepositoriesOrderBy, $orderDirection: OrderDirection) {
+        repositories(orderBy: $orderBy, orderDirection: $orderDirection) {
+        edges {
+            node {
+                id
+                ownerAvatarUrl
+                fullName
+                description
+                language
+                stargazersCount
+                forksCount
+                reviewCount
+                ratingAverage
+            }
+        }
         }
     }
 `;

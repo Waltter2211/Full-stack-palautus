@@ -1,7 +1,9 @@
-import { FlatList, View, StyleSheet, Pressable } from 'react-native';
+import { FlatList, View, StyleSheet, Pressable, Text } from 'react-native';
 import RepositoryItem from './RepositoryItem';
 import useRepositories from '../hooks/useRepositories';
 import { useNavigate } from 'react-router-native';
+import { Picker } from '@react-native-picker/picker';
+import { useRef, useState } from 'react';
 
 const styles = StyleSheet.create({
   separator: {
@@ -12,27 +14,34 @@ const styles = StyleSheet.create({
 const ItemSeparator = () => <View style={styles.separator} />;
 
 const RepositoryList = () => {
-
   const navigate = useNavigate()
 
-  const { repositories } = useRepositories();
+  const { repositories, refetch, sortVar } = useRepositories();
 
   const repositoryNodes = repositories
   ? repositories.edges?.map(edge => edge.node)
   : [];
 
   return (
-    <FlatList
-      data={repositoryNodes}
-      ItemSeparatorComponent={ItemSeparator}
-      // other props
-      renderItem={({item}) => (
-        <Pressable onPress={() => navigate(`${item.id}`)}>
-          <RepositoryItem fullName={item.fullName} description={item.description} language={item.language} stargazersCount={item.stargazersCount} forksCount={item.forksCount} reviewCount={item.reviewCount} ratingAverage={item.ratingAverage} ownerAvatarUrl={item.ownerAvatarUrl} />
-        </Pressable>
-      )}
-      keyExtractor={item => item.id}
-    />
+    <>
+      <FlatList
+        data={repositoryNodes}
+        ItemSeparatorComponent={ItemSeparator}
+        // other props
+        renderItem={({item}) => (
+          <Pressable onPress={() => navigate(`${item.id}`)}>
+            <RepositoryItem fullName={item.fullName} description={item.description} language={item.language} stargazersCount={item.stargazersCount} forksCount={item.forksCount} reviewCount={item.reviewCount} ratingAverage={item.ratingAverage} ownerAvatarUrl={item.ownerAvatarUrl} />
+          </Pressable>
+        )}
+        keyExtractor={item => item.id}
+        ListHeaderComponent={<Picker selectedValue={sortVar} onValueChange={(itemValue, itemIndex) => refetch(JSON.parse(itemValue))}>
+        <Picker.Item label='select sorting' value={JSON.stringify({test: 'test'})} />
+        <Picker.Item label='latest repositories' value={JSON.stringify({orderBy: 'CREATED_AT', orderDirection: 'DESC'})} />
+        <Picker.Item label='highest rated repositories' value={JSON.stringify({orderBy: 'RATING_AVERAGE', orderDirection: 'DESC'})} />
+        <Picker.Item label='lowest rated repositories' value={JSON.stringify({orderBy: 'RATING_AVERAGE', orderDirection: 'ASC'})} />
+      </Picker>}
+      />
+    </>
   );
 };
 

@@ -4,31 +4,23 @@ import { GET_REPOSITORIES } from '../graphql/queries';
 
 const useRepositories = () => {
     const [repositories, setRepositories] = useState();
-    /* const [loading, setLoading] = useState(false); */
+    const [sortVar, setSortVar] = useState();
 
-    const { data, loading, error } = useQuery(GET_REPOSITORIES)
+    const { data, loading, error } = useQuery(GET_REPOSITORIES, {
+        variables: {...sortVar}
+    })
 
-    /* const fetchRepositories = async () => {
-        setLoading(true);
-
-        const response = await fetch('http://88.195.213.99:5000/api/repositories');
-        const json = await response.json();
-
-        setLoading(false);
-        setRepositories(json);
-    } */
-
-    const fetchRepositoriesGql = () => {
-        setRepositories(data?.repositories);
+    const sortByOrder = (values) => {
+        setSortVar({...values})
     }
 
     useEffect(() => {
-        /* fetchRepositories(); */
-        fetchRepositoriesGql();
-        
-    }, [loading]);
+        setRepositories(data?.repositories);
+    }, [data]);
 
-  return { repositories, loading, refetch: fetchRepositoriesGql };
+    if (loading) return <div>loading</div>
+
+  return { repositories, loading, refetch: sortByOrder, sortVar };
 }
 
 export default useRepositories;
