@@ -21,10 +21,24 @@ export const GET_REPOSITORIES = gql`
 `;
 
 export const GET_AUTHENTICATED = gql`
-    {
+    query Query {
         me {
         id
         username
+        reviewCount
+        reviews {
+            edges {
+            node {
+                id
+                rating
+                repository {
+                fullName
+                }
+                createdAt
+                text
+            }
+            }
+        }
         }
     }
 `;

@@ -53,9 +53,13 @@ const AppBar = () => {
              ? <Link to='/signup'><Text style={styles.text}>Sign up</Text></Link>
              : <View></View>}
 
-             <Link to='/review'>
-                <Text style={styles.text}>Review</Text>
-            </Link>
+            {loggedIn !== undefined
+             ? <Link to='/review'><Text style={styles.text}>Review</Text></Link>
+             : <View></View>}
+
+            {loggedIn !== undefined
+            ? <Link to='/myReviews'><Text style={styles.text}>My reviews</Text></Link>
+            : <View></View>}
         </ScrollView>
     </View>
   )

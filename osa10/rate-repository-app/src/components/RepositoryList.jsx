@@ -3,6 +3,8 @@ import RepositoryItem from './RepositoryItem';
 import useRepositories from '../hooks/useRepositories';
 import { useNavigate } from 'react-router-native';
 import { Picker } from '@react-native-picker/picker';
+import { useQuery } from '@apollo/client';
+import { GET_AUTHENTICATED } from '../graphql/queries';
 
 const styles = StyleSheet.create({
   separator: {
