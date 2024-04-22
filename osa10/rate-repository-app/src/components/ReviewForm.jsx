@@ -101,7 +101,7 @@ const ReviewForm = () => {
           <Text style={{color: 'red'}}>{formik.errors.text}</Text>
         )}
         <Pressable style={styles.buttonStyle} onPress={formik.handleSubmit}>
-          <Text style={{color: 'white', fontWeight: 'bold'}}>Sign in</Text>
+          <Text style={{color: 'white', fontWeight: 'bold'}}>Give review</Text>
         </Pressable>
     </View>
   )

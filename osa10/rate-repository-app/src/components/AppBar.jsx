@@ -49,6 +49,10 @@ const AppBar = () => {
              ? <Link to='/signin'><Text style={styles.text}>Sign in</Text></Link>
              : <Text style={styles.text} onPress={handleSignOut}>Sign Out</Text>}
 
+            {loggedIn === undefined
+             ? <Link to='/signup'><Text style={styles.text}>Sign up</Text></Link>
+             : <View></View>}
+
              <Link to='/review'>
                 <Text style={styles.text}>Review</Text>
             </Link>
