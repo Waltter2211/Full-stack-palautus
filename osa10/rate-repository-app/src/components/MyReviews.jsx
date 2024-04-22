@@ -1,88 +1,66 @@
-import { useQuery } from '@apollo/client'
+import { useMutation, useQuery } from '@apollo/client'
 import React, { useEffect, useState } from 'react'
 import { GET_AUTHENTICATED } from '../graphql/queries'
-import { Image, StyleSheet, Text, View } from 'react-native';
-
-const styles = StyleSheet.create({
-    container: {
-      padding: 20,
-      display: 'flex',
-    },
-    infoContainer: {
-      width: '100%',
-      display: 'flex',
-      flexDirection: 'row',
-      flexWrap: 'wrap',
-    },
-    imageDiv: {
-      width: '20%',
-      padding: 10
-    },
-    imageStyle: {
-      width: '100%',
-      height: 50,
-      borderRadius: 5
-    },
-    descriptionDiv: {
-      width: '80%',
-      display: 'flex',
-      flexWrap: 'wrap',
-      alignItems: 'flex-start',
-      rowGap: 10
-    },
-    fullNameText: {
-      color: 'black',
-      fontSize: 24,
-      fontWeight: '700',
-    },
-    descriptionText: {
-      color: 'grey',
-      fontSize: 20,
-    },
-    languageText: {
-      backgroundColor: '#0366d6',
-      color: 'white',
-      borderRadius: 3,
-      padding: 3
-    },
-    ratingContainer: {
-      display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'space-around',
-      marginTop: 20,
-    },
-    ratingDiv: {
-      display: 'flex',
-      alignItems: 'center',
-    }
-});
+import { Alert, FlatList, Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { useNavigate } from 'react-router-native';
+import { DELETE_REVIEW } from '../graphql/mutations';
 
 const MyReviews = () => {
-    const { data, loading, error } = useQuery(GET_AUTHENTICATED);
+    const navigate = useNavigate()
+    const authenticatedData = useQuery(GET_AUTHENTICATED);
+    const [mutate, result] = useMutation(DELETE_REVIEW);
     const [reviews, setReviews] = useState();
 
     useEffect(() => {
-        setReviews(data.me.reviews.edges)
+        setReviews(authenticatedData.data.me.reviews.edges)
     })
 
-    if (loading) return <View>loading</View>
+    const buttonAlert = async (id) => {
+        /* Alert.alert('Delete review', 'Are you sure you want to delete this review?', [
+            {text: 'Cancel', onPress: () => console.log('cancel pressed')},
+            {text: 'Ok', onPress: () => console.log('ok pressed')}
+        ]) */
+        try {
+            await mutate({variables:{deleteReviewId: id}})
+            authenticatedData.refetch()
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    
+
+    const Item = ({ props }) => {
+        return (
+            <View style={{display: 'flex', flexDirection: 'row', padding: '10px', columnGap: '10px'}} key={props.node.id}>
+                <View style={{width: '50px', height: '50px', border: '2px solid blue', borderRadius: '25px', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                    <Text style={{fontWeight: 'bold', color: 'blue'}}>{props.node.rating}</Text>
+                </View>
+                <View style={{width: '95%', display: 'flex', flexWrap: 'wrap'}}>
+                    <Text style={{fontWeight: 'bold'}}>{props.node.repository.fullName}</Text>
+                    <Text style={{color: 'grey'}}>{props.node.createdAt.split('T')[0].replaceAll('-', '.')}</Text>
+                    <Text>{props.node.text}</Text>
+                    <View style={{width:'100%', display:'flex', flexDirection:'row', columnGap:'10px'}}>
+                        <Pressable style={{backgroundColor:'blue', padding:'10px', borderRadius:'5px'}}>
+                            <Text style={{color:'white', fontWeight:'bold'}} onPress={() => navigate(`/${props.node.repositoryId}`)}>View repository</Text>
+                        </Pressable>
+                        <Pressable style={{backgroundColor:'red', padding:'10px', borderRadius:'5px'}}>
+                            <Text style={{color:'white', fontWeight:'bold'}} onPress={() => buttonAlert(props.node.id)}>Delete review</Text>
+                        </Pressable>
+                    </View>
+                </View>
+            </View>
+        )
+        
+    }
+
+    if (authenticatedData.loading) return <View>loading</View>
 
   return (
     <>
-        {reviews?.map(({ node }) => {
-            return (
-                <View style={{display: 'flex', flexDirection: 'row', padding: '10px', columnGap: '10px'}} key={node.id}>
-                    <View style={{width: '50px', height: '50px', border: '2px solid blue', borderRadius: '25px', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                        <Text style={{fontWeight: 'bold', color: 'blue'}}>{node.rating}</Text>
-                    </View>
-                    <View style={{width: '95%', display: 'flex', flexWrap: 'wrap'}}>
-                        <Text style={{fontWeight: 'bold'}}>{node.repository.fullName}</Text>
-                        <Text style={{color: 'grey'}}>{node.createdAt.split('T')[0].replaceAll('-', '.')}</Text>
-                        <Text>{node.text}</Text>
-                    </View>
-                </View>
-            )
-        })}
+        <FlatList 
+            data={reviews}
+            renderItem={({item}) => <Item props={{...item}} />}
+        />
     </>
   )
 }

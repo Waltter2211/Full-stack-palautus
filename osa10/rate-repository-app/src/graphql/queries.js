@@ -36,6 +36,7 @@ export const GET_AUTHENTICATED = gql`
                 }
                 createdAt
                 text
+                repositoryId
             }
             }
         }
