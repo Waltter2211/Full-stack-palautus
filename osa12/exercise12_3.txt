@@ -1,0 +1,6 @@
+docker run sad_robinson
+apt-get update
+apt-get install nano
+nano /usr/src/app/index.js
+added console.log("hello world"); to index.js
+exit
