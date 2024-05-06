@@ -60,4 +60,3 @@ typings/
 # next.js build output
 .next
 mongo_data
-redis_data
