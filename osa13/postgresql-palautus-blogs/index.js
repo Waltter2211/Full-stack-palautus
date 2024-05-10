@@ -50,6 +50,19 @@ app.get('/api/blogs', async (req, res) => {
     }
 })
 
+app.get('/api/blogs/:id', async (req, res) => {
+    try {
+        const blog = await Blog.findByPk(req.params.id)
+        if (blog) {
+            res.send(blog)
+        } else {
+            res.status(404).end()
+        }
+    } catch (error) {
+        console.log(error)
+    }
+})
+
 app.post('/api/blogs', async (req, res) => {
     try {
         const blog = req.body
@@ -59,6 +72,35 @@ app.post('/api/blogs', async (req, res) => {
     } catch (error) {
         console.log(error)
         res.send(error)
+    }
+})
+
+app.put('/api/blogs/:id', async (req, res) => {
+    try {
+        const blog = await Blog.findByPk(req.params.id)
+        if (blog) {
+            blog.likes = req.body.likes
+            await blog.save()
+            res.json(blog)
+        } else {
+            res.status(404).end()
+        }
+    } catch (error) {
+        console.log(error)
+    }
+})
+
+app.delete('/api/blogs/:id', async (req, res) => {
+    try {
+        const blog = await Blog.findByPk(req.params.id)
+        if (blog) {
+            await blog.destroy()
+            res.json(blog)
+        } else {
+            res.status(404).end()
+        }
+    } catch (error) {
+        console.log(error)
     }
 })
 
