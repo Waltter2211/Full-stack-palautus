@@ -1,7 +1,6 @@
 const router = require('express').Router()
 
 const { User, Blog } = require('../models')
-const { findByPk } = require('../models/user')
 
 router.get('/', async (req, res) => {
     try {
@@ -17,13 +16,15 @@ router.get('/', async (req, res) => {
     }
 })
 
-router.post('/', async (req, res) => {
+router.post('/', async (req, res, next) => {
     try {
         const user = req.body
+        user.password = 'testpass'
         await User.create(user)
         res.send('success')
     } catch (error) {
         console.log(error)
+        next(error)
     }
 })
 
