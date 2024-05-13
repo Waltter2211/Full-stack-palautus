@@ -13,7 +13,7 @@ router.post('/', async (req, res) => {
             res.status(401).end({error: 'invalid username or password'})
         }
 
-        const userForToken = {name: user.name, username: user.username}
+        const userForToken = {id: user.id, username: user.username}
         const token = jwt.sign(userForToken, process.env.JWT_SECRET)
 
         res.send({ token, name: user.name, username: user.username })
