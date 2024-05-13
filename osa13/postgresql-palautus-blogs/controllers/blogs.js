@@ -1,9 +1,26 @@
 const router = require('express').Router()
+const jwt = require('jsonwebtoken')
 
 const { Blog } = require('../models')
 
 const blogFinder = async (req, res, next) => {
     req.blog = await Blog.findByPk(req.params.id)
+    next()
+}
+
+const jwtVerifier = async (req, res, next) => {
+    const authorizationToken = req.get('authorization')
+
+    if (authorizationToken && authorizationToken.toLowerCase().startsWith('bearer')) {
+        try {
+            req.decodedToken = jwt.verify(authorizationToken.substring(7), process.env.JWT_SECRET)
+        } catch (error) {
+            console.log(error)
+            return res.status(401).send({ error: 'token invalid' })
+        }
+    } else {
+        return res.status(401).send({ error: 'token missing' })
+    }
     next()
 }
 
@@ -20,7 +37,7 @@ router.get('/', async (req, res) => {
 router.get('/:id', blogFinder, async (req, res) => {
     try {
         if (req.blog) {
-            
+            res.send(req.blog)
         } else {
             res.status(404).end()
         }
@@ -53,7 +70,7 @@ router.put('/:id', blogFinder, async (req, res, next) => {
     }
 })
 
-router.delete('/:id', blogFinder, async (req, res) => {
+router.delete('/:id', jwtVerifier, blogFinder, async (req, res) => {
     try {
         if (req.blog) {
             await req.blog.destroy()
