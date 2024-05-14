@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken')
 const { Op, Sequelize } = require('sequelize')
 
 const { Blog, User } = require('../models')
+const { sequelize } = require('../util/db')
 
 const blogFinder = async (req, res, next) => {
     req.blog = await Blog.findByPk(req.params.id)
@@ -49,9 +50,11 @@ router.get('/', async (req, res) => {
                 model: User,
                 attributes: ['name']
             },
-            where
+            where,
+            order: [
+                ['likes', 'DESC']
+            ]
         })
-        console.log("querystringi", req.query)
         res.send(blogs)
     } catch (error) {
         console.log(error)
