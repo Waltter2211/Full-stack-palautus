@@ -1,5 +1,6 @@
 const router = require('express').Router()
 const jwt = require('jsonwebtoken')
+const { Op, Sequelize } = require('sequelize')
 
 const { Blog, User } = require('../models')
 
@@ -27,13 +28,23 @@ const jwtVerifier = async (req, res, next) => {
 
 router.get('/', async (req, res) => {
     try {
+        const where = {}
+
+        if (req.query.search) {
+            where.title = {
+                [Op.substring]: req.query.search
+            }
+        }
+
         const blogs = await Blog.findAll({
             attributes: { exclude: ['userId'] },
             include: {
                 model: User,
                 attributes: ['name']
-            }
+            },
+            where
         })
+        console.log("querystringi", req.query)
         res.send(blogs)
     } catch (error) {
         console.log(error)
