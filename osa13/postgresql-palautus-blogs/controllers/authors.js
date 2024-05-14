@@ -10,7 +10,8 @@ router.get('/', async (req, res) => {
             include: [[sequelize.fn('COUNT', sequelize.col('likes')), 'blogs'],
             [sequelize.fn('SUM', sequelize.col('likes')), 'likes']]
         },
-        group: ['author']
+        group: ['author'],
+        order: [['likes', 'DESC']]
     })
     res.send(users)
 })
