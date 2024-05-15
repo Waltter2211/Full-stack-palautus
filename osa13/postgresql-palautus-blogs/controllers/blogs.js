@@ -75,14 +75,14 @@ router.get('/:id', blogFinder, async (req, res) => {
     }
 })
 
-router.post('/', jwtVerifier, async (req, res) => {
+router.post('/', jwtVerifier, async (req, res, next) => {
     try {
         const user = await User.findByPk(req.decodedToken.id)
         const blog = await Blog.create({...req.body, userId: user.id})
         res.send(blog)
     } catch (error) {
         console.log(error)
-        res.send(error)
+        next(error)
     }
 })
 
