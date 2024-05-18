@@ -24,6 +24,11 @@ module.exports = {
         type: DataTypes.INTEGER,
         defaultValue: 0,
       },
+      userId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: { model: 'users', key: 'id' }
+      },
       created_at: {
         type: DataTypes.DATE,
         allowNull: false,
