@@ -37,6 +37,7 @@ router.get("/", async (req, res) => {
       attributes: { exclude: ["userId"] },
       include: {
         model: User,
+        as: "usersMarked",
         attributes: ["name"],
       },
       where,
